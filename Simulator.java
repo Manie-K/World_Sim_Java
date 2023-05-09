@@ -7,14 +7,14 @@ public class Simulator {
    private World world;
    private Logger logger;
    private InputManager manager;
-   public Simulator(int x, int y)
+   Simulator(int w, int h)
    {
-      manager = new InputManager;
+      manager = new InputManager(0,0);
       logger = new Logger(manager);
-      world = new World(x, y);
+      world = new GridWorld(w, h);
       setUpWorld();
    }
-   public void run()
+   void run()
    {
       world.drawWorld();
       logger.display();
@@ -38,7 +38,10 @@ public class Simulator {
          }
       }
    }
-   private void setUpWorld(){} //here are the initial conditions
+   private void setUpWorld()//here are the initial conditions
+   {
+
+   }
    private void save(){}
    private void load(){}
 }

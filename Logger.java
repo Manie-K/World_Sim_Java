@@ -7,8 +7,8 @@ public class Logger {
     private final static int max_messages = Config.LOG_MAX_MESSAGES;
     private boolean added;
     private InputManager input;
-    public Logger(  InputManager in){}
-    public Logger(  InputManager in, Vector<String> log, boolean add){
+    Logger(  InputManager in){}
+    Logger(  InputManager in, Vector<String> log, boolean add){
 
     }
     void display()

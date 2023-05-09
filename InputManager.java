@@ -15,7 +15,7 @@ public class InputManager {
         abilityLeft = al;
         abilityCooldown = ac;
     }
-    public void input()
+    void input()
     {
         arrowKey = quit = save = load = false;
        // inputChar = _getch();
@@ -48,15 +48,15 @@ public class InputManager {
         }
     }
 
-    public boolean getQuit() { return quit; }
-    public boolean getSave() { return save; }
-    public boolean getLoad() { return load; }
-    public boolean getArrowKey() { return arrowKey; }
-    public int getInput(){return inputChar;}
-    public int getAbility() { return abilityLeft; }
-    public int getAbilityCooldown() { return abilityCooldown; }
+    boolean getQuit() { return quit; }
+    boolean getSave() { return save; }
+    boolean getLoad() { return load; }
+    boolean getArrowKey() { return arrowKey; }
+    int getInput(){return inputChar;}
+    int getAbility() { return abilityLeft; }
+    int getAbilityCooldown() { return abilityCooldown; }
 
-    public void nextTurn()
+    void nextTurn()
     {
         if (abilityLeft > 0)
             abilityLeft--;
@@ -64,10 +64,10 @@ public class InputManager {
             abilityCooldown--;
     }
 
-    public void saveFile()
+    void saveFile()
     {
     }
-    public InputManager loadFile()
+    InputManager loadFile()
     {
         return  new InputManager(0,0);
     }
