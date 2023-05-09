@@ -17,8 +17,7 @@ public class WolfBerries extends Plant{
     @Override
     boolean kill(Organism attacker) {
         killOrganism(attacker);
-        //logger.addLog({attacker -> getSpecies() + " died from eating " + species, KILL});
-        //ADD LOGSSSSSSSSSSSSSSSSSSSSS
+        logger.addLog(attacker.getSpecies() + " died from eating " + getSpecies());
         return true;
     }
 }

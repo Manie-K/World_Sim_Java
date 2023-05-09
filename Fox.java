@@ -21,6 +21,9 @@ public class Fox extends Animal{
     @Override
     boolean goodSmell(Organism defender)
     {
+        if (defender == null || defender.getStrength() <= getStrength())
+            return false;
+        logger.addLog(getSpecies() + " hasn't attacked " + defender.getSpecies() + " because of good smell");
         return true;
     }
 }

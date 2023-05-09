@@ -18,7 +18,6 @@ public class Guarana extends Plant{
     void modify(Organism attacker)
     {
         attacker.setStrength(attacker.getStrength()+3);
-        //ADD LOGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGS
-        //logger.addLog({ attacker->getSpecies() + " got stronger beacause it ate " + species, EAT });
+        logger.addLog(attacker.getSpecies() + " got stronger beacause it ate " + getSpecies());
     }
 }

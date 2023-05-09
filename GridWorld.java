@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.util.Random;
+
 public class GridWorld extends World{
     private Organism[][] map;
     GridWorld(int w, int h)
@@ -105,6 +107,85 @@ public class GridWorld extends World{
             pos = caller.getPosition(); //second loop iteration will look at tiles near this organism
         }
         return false;
+    }
+    @Override
+    int simulatePlantMove(int noGoodTile, final int x, Plant caller)
+    {
+        int dir = new Random().nextInt(getDirectionCount());
+        if (dir == 0) //TOP
+        {
+            if (caller.getPosition().getValue() > 0 && getOrganismAtPos
+                    (new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()-1)) == null)
+            {
+                caller.sow(new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()-1));
+                noGoodTile = x;
+            }
+            else
+                noGoodTile = noGoodTile | (1 <<dir);
+        }
+        else if (dir == 1) //BOTTOM
+        {
+            if (caller.getPosition().getValue() < worldHeight - 1 && getOrganismAtPos
+                    (new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()+1)) == null)
+            {
+                caller.sow(new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()+1));
+                noGoodTile = x;
+            }
+            else
+                noGoodTile = noGoodTile | (1 << dir);
+        }
+        else if (dir == 2) //RIGHT
+        {
+            if (caller.getPosition().getKey() < worldWidth - 1 && getOrganismAtPos
+                    (new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue())) == null)
+            {
+                caller.sow(new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue()));
+                noGoodTile = x;
+            }
+            else
+                noGoodTile = noGoodTile | (1 << dir);
+        }
+        else if (dir == 3) //LEFT
+        {
+            if (caller.getPosition().getKey() > 0 && getOrganismAtPos
+                    (new Pair<>(caller.getPosition().getKey()-1,caller.getPosition().getValue())) == null)
+            {
+                caller.sow(new Pair<>(caller.getPosition().getKey()-1,caller.getPosition().getValue()));
+                noGoodTile = x;
+            }
+            else
+                noGoodTile = noGoodTile | (1 << dir);
+        }
+        return noGoodTile;
+    }
+    @Override
+    void killNearbyAnimals(Organism caller)
+    {
+        Pair<Integer,Integer> position = caller.getPosition();
+        position = new Pair<>(position.getKey(), position.getValue()-1);
+        if (position.getValue() > 0 && getOrganismAtPos(position) instanceof Animal)
+        {
+            caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
+            caller.killOrganism(getOrganismAtPos(position));
+        }
+        position = new Pair<>(position.getKey(), position.getValue()+1);
+        if (position.getValue() < worldHeight - 1 && getOrganismAtPos(position) instanceof Animal)
+        {
+            caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
+            caller.killOrganism(getOrganismAtPos(position));
+        }
+        position = new Pair<>(position.getKey()+1, position.getValue());
+        if (position.getKey() < worldWidth - 1 && getOrganismAtPos(position) instanceof Animal)
+        {
+            caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
+            caller.killOrganism(getOrganismAtPos(position));
+        }
+        position = new Pair<>(position.getKey()-1, position.getValue());
+        if (position.getKey() > 0 && getOrganismAtPos(position) instanceof Animal)
+        {
+            caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
+            caller.killOrganism(getOrganismAtPos(position));
+        }
     }
     @Override
     Organism getOrganismAtPos(Pair<Integer, Integer> pos) {

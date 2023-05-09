@@ -21,5 +21,9 @@ public class Turtle extends Animal{
     float chanceToStay(){return 0.75f;}
 
     @Override
-    boolean defenderDeflected(Animal attacker){return true;}
+    boolean defenderDeflected(Animal attacker){
+        if(attacker!=null)
+            return attacker.getStrength() < 5;
+        return false;
+    }
 }

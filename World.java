@@ -37,14 +37,16 @@ public abstract class World {
         }
         organisms.removeIf(null);
     }
-    abstract boolean handleAnimalBreeding(Pair<Integer, Integer> partnerPos, Animal caller);
     abstract Organism getOrganismAtPos(Pair<Integer, Integer> pos);
     abstract Organism getOrganismAtPos(int x, int y);
     abstract void setOrganismAtPos(Pair<Integer, Integer> pos, Organism newOrganism);
     abstract void setOrganismAtPos(int x, int y, Organism newOrganism);
     abstract int getDirectionCount();
     abstract void drawWorld();
+    abstract boolean handleAnimalBreeding(Pair<Integer, Integer> partnerPos, Animal caller);
     abstract boolean simulateAnimalMove(int direction, int badTiles,boolean dead, Animal caller);
+    abstract int simulatePlantMove(int noGoodTile, final int x, Plant caller);
+    abstract void killNearbyAnimals(Organism caller);
     abstract void saveFile();
 
     static World loadFile(Logger logger, InputManager input)
