@@ -1,6 +1,7 @@
 package World_sim;
 
 public class Config {
+        public static final int LOG_MAX_MESSAGES = 12;
         public static final char END_SIMULATION_KEY ='x';
         public static final char ABILITY_KEY ='m';
         public static final char SAVE_KEY ='s';
