@@ -1,13 +1,12 @@
 package World_sim;
-
+import javafx.util.Pair;
 import javax.swing.*;
+import java.awt.*;
 
 public class Simulator {
-    public void Simulator() {
-        JFrame window = new JFrame("193302 Maciej Góralczyk");
-        window.setVisible(true);
-        window.setSize(900, 400);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+   public Simulator(int x, int y)
+   {
+
+   }
 
 }
