@@ -3,13 +3,13 @@ package World_sim;
 import javafx.util.Pair;
 
 public class Turtle extends Animal{
-    public Turtle(World w, Logger l, int s, int i, String species, Pair<Integer, Integer> pos){
-        super(w, l, s, i, species, pos);
+    public Turtle(World w, Logger l, int s, Pair<Integer, Integer> pos){
+        super(w, l, s, Config.TURTLE_INIT,Config.TURTLE_SPEC, pos);
     }
 
     @Override
     public Organism giveBirth(World w, Logger l, Pair<Integer, Integer> pos) {
-        return new Turtle(w,l, Config.TURTLE_STRENGTH, Config.TURTLE_INIT,Config.TURTLE_SPEC,pos);
+        return new Turtle(w,l, Config.TURTLE_STRENGTH, pos);
     }
 
     @Override

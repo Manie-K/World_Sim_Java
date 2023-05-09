@@ -31,5 +31,10 @@ public class Config {
         public static final int HUMAN_STRENGTH = 5;
         public static final int HUMAN_INIT = 4;
         public static final String HUMAN_SPEC = "Human";
+        public static final String DANDELION_SPEC = "Dandelion";
+        public static final String GRASS_SPEC = "Grass";
+        public static final String GUARANA_SPEC = "Guarana";
+        public static final String WOLF_BERRIES_SPEC = "WolfBerries";
+        public static final String GIANT_HOGWEED_SPEC = "GiantHogweed";
 
 }

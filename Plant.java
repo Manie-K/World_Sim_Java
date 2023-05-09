@@ -3,8 +3,8 @@ package World_sim;
 import javafx.util.Pair;
 
 public abstract class Plant extends Organism{
-    public Plant(World w, Logger l, int s, int i, String species, Pair<Integer, Integer> pos) {
-        super(w, l, s, i, species, pos);
+    public Plant(World w, Logger l, int s, String species, Pair<Integer, Integer> pos) {
+        super(w, l, s, 0, species, pos);
     }
 
     public void sow(Pair<Integer, Integer> pos){
