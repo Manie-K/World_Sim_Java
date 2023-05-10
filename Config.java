@@ -1,18 +1,13 @@
 package World_sim;
 
 public class Config {
+        public static String SAVE_FILE_NAME = "saveFile.txt";
+        public static String GRID_TYPE = "GRID_TYPE";
+        public static String HEX_TYPE = "HEX_TYPE";
         public static final int LOG_MAX_MESSAGES = 12;
         public static final int TILE_SIZE = 20;
         public static final double PLANT_SEED_CHANCE = 0.35;
-        public static final char END_SIMULATION_KEY ='x';
-        public static final char ABILITY_KEY ='m';
-        public static final char SAVE_KEY ='s';
-        public static final char LOAD_KEY ='l';
-        public static final int ARROW_MODIFIER_KEY =224;
-        public static final int UP_ARROW	= 72;
-        public static final int DOWN_ARROW  = 80;
-        public static final int RIGHT_ARROW = 77;
-        public static final int LEFT_ARROW  = 75;
+
         public static final int ABILITY_TIME = 5;
         public static final int ABILITY_COOLDOWN  = 10;
 

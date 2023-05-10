@@ -3,13 +3,13 @@ package World_sim;
 import javafx.util.Pair;
 
 public class Antelope extends Animal{
-    Antelope(World w, Logger l, int s, Pair<Integer, Integer> pos){
-        super(w, l, s, Config.ANTELOPE_INIT,Config.ANTELOPE_SPEC, pos);
+    Antelope(World w, Logger l, int s, int a,Pair<Integer, Integer> pos){
+        super(w, l, s, Config.ANTELOPE_INIT,a,Config.ANTELOPE_SPEC, pos);
     }
 
     @Override
     Organism giveBirth(World w, Logger l, Pair<Integer, Integer> pos) {
-        return new Antelope(w,l, Config.ANTELOPE_STRENGTH, pos);
+        return new Antelope(w,l, Config.ANTELOPE_STRENGTH, 0,pos);
     }
 
     @Override

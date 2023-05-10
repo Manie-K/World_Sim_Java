@@ -6,8 +6,8 @@ import java.util.Random;
 
 public class Human extends Animal{
     private InputManager manager;
-    Human(World w, Logger l,InputManager man, int s, Pair<Integer, Integer> pos){
-        super(w, l, s, Config.HUMAN_INIT,Config.HUMAN_SPEC, pos);
+    Human(World w, Logger l,InputManager man, int s,int a, Pair<Integer, Integer> pos){
+        super(w, l, s, Config.HUMAN_INIT,a,Config.HUMAN_SPEC, pos);
         manager = man;
     }
 
@@ -35,6 +35,6 @@ public class Human extends Animal{
     int getDirection() //Won't move into border
     {
         //IMPLEMENT
-        return 0;
+        return manager.getHumanDirection(getPosition());
     }
 }

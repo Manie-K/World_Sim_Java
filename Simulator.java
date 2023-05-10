@@ -2,6 +2,10 @@ package World_sim;
 import javafx.util.Pair;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.*;
 
 public class Simulator {
    private World world;
@@ -17,6 +21,38 @@ public class Simulator {
       window.setLayout(null);
       window.setSize(windowWidth,windowHeight);
       window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+      window.addKeyListener(new KeyAdapter() {
+         @Override
+         public void keyReleased(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+               manager.moveRight();
+               manager.setNextTurn(true);
+            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+               manager.moveLeft();
+               manager.setNextTurn(true);
+            } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+               manager.moveDown();
+               manager.setNextTurn(true);
+            } else if (e.getKeyCode() == KeyEvent.VK_UP){
+               manager.moveUp();
+               manager.setNextTurn(true);
+            }
+            /*
+            * else if (e.getKeyCode() == KeyEvent.VK_E && world.getDirectionCount==6){
+               manager.moveNE();
+               manager.setNextTurn(true);
+            }
+            * else if (e.getKeyCode() == KeyEvent.VK_Q && world.getDirectionCount==6){
+               manager.moveNW();
+               manager.setNextTurn(true);
+            }
+            * */
+            else if (e.getKeyCode() == KeyEvent.VK_P){
+               manager.ability();
+               manager.setNextTurn(false);
+            }
+         }
+      });
 
       JPanel mapPanel = new JPanel();
       mapPanel.setBackground(Color.BLUE);
@@ -67,13 +103,14 @@ public class Simulator {
       logger.display();
       while (!manager.getQuit())
       {
-         manager.input();
-         if (manager.getArrowKey())
+         manager.reset();
+         if (manager.getNextTurn())
          {
             world.simulateTurn();
             world.drawWorld();
             manager.nextTurn();
             logger.display();
+            manager.setNextTurn(false);
          }
          else if (manager.getLoad())
          {
@@ -89,6 +126,34 @@ public class Simulator {
    {
 
    }
-   private void save(){System.out.println("SAVE");}
-   private void load(){System.out.println("LOAD");}
+   private void save(){
+      try {
+         FileWriter writer = new FileWriter(Config.SAVE_FILE_NAME, false);
+         manager.saveFile(writer);
+         world.saveFile(writer);
+         writer.close();
+         logger.addLog("Pomyslnie zapisano do pliku");
+         world.drawWorld();
+      }catch (IOException e) {
+         throw new RuntimeException(e);
+      }
+   }
+   private void load() {
+      try {
+         File file = new File(Config.SAVE_FILE_NAME);
+         FileReader reader = new FileReader(file);
+         BufferedReader bufferedReader = new BufferedReader(reader);
+         manager = manager.loadFile(bufferedReader);
+         logger = new Logger(manager);
+         world = World.loadNewWorld(logger,bufferedReader, manager);
+         bufferedReader.close();
+         reader.close();
+         logger.addLog("Pomyslnie wczytano swiat");
+         world.drawWorld();
+      } catch (FileNotFoundException e) {
+         throw new RuntimeException(e);
+      } catch (IOException e) {
+         throw new RuntimeException(e);
+      }
+   }
 }

@@ -1,58 +1,69 @@
 package World_sim;
+import javafx.util.Pair;
+
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class InputManager {
+    boolean nextTurn;
     private boolean quit;
     private boolean save;
     private boolean load;
-    private boolean arrowKey;
-    private int inputChar;
+    private int direction;
     private int abilityLeft;
     private int abilityCooldown;
     InputManager(int al, int ac)
     {
-        quit = save = load = arrowKey = false;
-        inputChar = 0;
+        quit = save = load = nextTurn = false;
         abilityLeft = al;
         abilityCooldown = ac;
+        direction = 0;
     }
-    void input()
+    int getHumanDirection(Pair<Integer,Integer> pos)
     {
-        arrowKey = quit = save = load = false;
-       // inputChar = _getch();
-        if(inputChar== Config.ARROW_MODIFIER_KEY){
-            //inputChar = _getch();
-            if (inputChar == Config.UP_ARROW || inputChar == Config.DOWN_ARROW ||
-                    inputChar == Config.LEFT_ARROW || inputChar == Config.RIGHT_ARROW)
-            {
-                arrowKey = true;
-            }
-        }
-        if (inputChar == Config.END_SIMULATION_KEY)
-        {
-            quit = true;
-        }
-        if (inputChar == Config.SAVE_KEY)
-        {
-            save = true;
-        }
-        if (inputChar == Config.LOAD_KEY)
-        {
-            load = true;
-        }
-        if (inputChar == Config.ABILITY_KEY)
-        {
-            if (abilityCooldown == 0) {
-                abilityCooldown = Config.ABILITY_COOLDOWN;
-                abilityLeft = Config.ABILITY_TIME;
-            }
+        return direction;
+    }
+    void reset()
+    {
+        direction = 0;
+        quit = save = load = false;
+    }
+    void ability()
+    {
+        if (abilityCooldown == 0) {
+            abilityCooldown = Config.ABILITY_COOLDOWN;
+            abilityLeft = Config.ABILITY_TIME;
         }
     }
 
+    void moveUp()
+    {
+        direction = 0;
+    }
+    void moveDown()
+    {
+        direction = 1;
+    }
+    void moveRight()
+    {
+        direction = 2;
+    }
+    void moveLeft()
+    {
+        direction = 3;
+    }
+    boolean getNextTurn()
+    {
+        return nextTurn;
+    }
+    void setNextTurn(boolean val)
+    {
+        nextTurn = val;
+    }
     boolean getQuit() { return quit; }
     boolean getSave() { return save; }
     boolean getLoad() { return load; }
-    boolean getArrowKey() { return arrowKey; }
-    int getInput(){return inputChar;}
     int getAbility() { return abilityLeft; }
     int getAbilityCooldown() { return abilityCooldown; }
 
@@ -64,11 +75,23 @@ public class InputManager {
             abilityCooldown--;
     }
 
-    void saveFile()
+    void saveFile(FileWriter writer)
     {
+        try {
+            writer.write(abilityLeft);
+            writer.write(abilityCooldown);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    InputManager loadFile()
+    InputManager loadFile(BufferedReader reader)
     {
-        return  new InputManager(0,0);
+       try {
+           String al  = reader.readLine();
+           String ac  = reader.readLine();
+           return new InputManager(Integer.valueOf(al),Integer.valueOf(ac));
+       } catch (IOException e) {
+           throw new RuntimeException(e);
+       }
     }
 }

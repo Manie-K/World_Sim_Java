@@ -2,10 +2,15 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
+import java.util.Vector;
 
 public class GridWorld extends World{
     private Organism[][] map;
+    private String worldType = Config.GRID_TYPE;
     GridWorld(int w, int h)
     {
         super(w,h);
@@ -28,7 +33,7 @@ public class GridWorld extends World{
             }
             else badTiles|=(1<<direction);
         }
-        else if (direction == 1 && caller.getPosition().getValue() < getHeight() - 1 && (badTiles & (1 << direction))==0)//bottom
+        else if (direction == 1 && caller.getPosition().getValue() < worldHeight - 1 && (badTiles & (1 << direction))==0)//bottom
         {
             if (getOrganismAtPos(caller.getPosition().getKey(),caller.getPosition().getValue() + 1 ) == null)
             {
@@ -43,7 +48,7 @@ public class GridWorld extends World{
             }
             else badTiles |= (1 << direction);
         }
-        else if (direction == 2 && caller.getPosition().getKey() < getWidth() - 1 && (badTiles & (1 << direction))==0)//right
+        else if (direction == 2 && caller.getPosition().getKey() < worldWidth - 1 && (badTiles & (1 << direction))==0)//right
         {
             if (getOrganismAtPos(caller.getPosition().getKey() + 1,caller.getPosition().getValue() ) == null)
             {
@@ -213,7 +218,65 @@ public class GridWorld extends World{
     }
 
     @Override
-    void saveFile() {
+    void saveFile(FileWriter writer) {
+        try {
+            int organismCount = getOrganisms().size();
+            writer.write(worldType);
+            writer.write(worldWidth);
+            writer.write(worldHeight);
+            writer.write(organismCount);
+            for (Organism org : getOrganisms()) {
+                if(org!=null)
+                    org.save(writer);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    static GridWorld load(Logger logger,BufferedReader reader, InputManager input)
+    {
+        try {
+            int w, h, size;
+            String line;
+            line = reader.readLine();
+            w = Integer.valueOf(line);
+            line = reader.readLine();
+            h = Integer.valueOf(line);
+            line = reader.readLine();
+            size = Integer.valueOf(line);
+
+            GridWorld gridWorld = new GridWorld(w, h);
+            Vector<Organism> organismsTemp = new Vector<>();
+
+            for (int i = 0; i < size; i++) {
+                organismsTemp.add(Organism.load(gridWorld,logger,reader,input));
+            }
+
+            Organism[][] map = new Organism[h][w];
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    map[y][x] = null;
+                }
+            }
+
+            for (Organism org : organismsTemp)
+            {
+                if (org != null)
+                    map[org.getPosition().getValue()][org.getPosition().getKey()] = org;
+            }
+
+            gridWorld.setOrganisms(organismsTemp);
+            gridWorld.setMap(map);
+            return gridWorld;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void setMap(Organism[][] tempMap)
+    {
+        map = tempMap;
     }
 }

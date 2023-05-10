@@ -6,8 +6,8 @@ import java.util.Random;
 
 abstract class Animal extends Organism {
 
-    Animal(World w, Logger l, int s, int i, String species, Pair<Integer, Integer> pos) {
-        super(w, l, s, i, species, pos);
+    Animal(World w, Logger l, int s, int i, int a,String species, Pair<Integer, Integer> pos) {
+        super(w, l, s, i, a, species, pos);
     }
     @Override
     void action(){

@@ -2,6 +2,10 @@ package World_sim;
 
 import com.sun.org.apache.xpath.internal.operations.Or;
 import javafx.util.Pair;
+
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Vector;
 
 public abstract class World {
@@ -12,9 +16,8 @@ public abstract class World {
         worldWidth=w;
         worldHeight = h;
     }
-    int getWidth() {return worldWidth;}
-    int getHeight() {return worldHeight;}
     Vector<Organism> getOrganisms(){return organisms;}
+    void setOrganisms( Vector<Organism> val){organisms = val;}
     void simulateTurn()
     {
         organisms.sort((Organism o1, Organism o2) -> {
@@ -47,10 +50,15 @@ public abstract class World {
     abstract boolean simulateAnimalMove(int direction, int badTiles,boolean dead, Animal caller);
     abstract int simulatePlantMove(int noGoodTile, final int x, Plant caller);
     abstract void killNearbyAnimals(Organism caller);
-    abstract void saveFile();
-
-    static World loadFile(Logger logger, InputManager input)
-    {
+    abstract void saveFile(FileWriter writer);
+    public static World loadNewWorld(Logger logger,BufferedReader reader, InputManager input) {
+        try {
+            String type = reader.readLine();
+            if(type == Config.GRID_TYPE)
+                return GridWorld.load(logger,reader,input);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }
