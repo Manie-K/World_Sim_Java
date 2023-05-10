@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
+
 public class Sheep extends Animal{
     Sheep(World w, Logger l, int s,int a, Pair<Integer, Integer> pos){
         super(w, l, s,Config.SHEEP_INIT,a,Config.SHEEP_SPEC, pos);
@@ -12,7 +14,7 @@ public class Sheep extends Animal{
     }
 
     @Override
-    void draw() {
-
+    Color draw() {
+        return Config.SHEEP_COLOR;
     }
 }

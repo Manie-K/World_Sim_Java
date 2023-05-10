@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
+
 public class Grass extends Plant{
 
     Grass(World w, Logger l,int a,Pair<Integer, Integer> pos){
@@ -13,8 +15,8 @@ public class Grass extends Plant{
     }
 
     @Override
-    void draw() {
-
+    Color draw() {
+        return Config.GRASS_COLOR;
     }
 
 }

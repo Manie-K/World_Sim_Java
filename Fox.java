@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
+
 public class Fox extends Animal{
 
     Fox(World w, Logger l, int s, int a,Pair<Integer, Integer> pos){
@@ -14,8 +16,8 @@ public class Fox extends Animal{
     }
 
     @Override
-    void draw() {
-
+    Color draw() {
+        return Config.FOX_COLOR;
     }
 
     @Override

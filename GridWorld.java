@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -213,8 +215,33 @@ public class GridWorld extends World{
     @Override
     int getDirectionCount(){return 4;}
     @Override
-    void drawWorld() {
+    void drawWorld(JPanel mapPanel) {
+        mapPanel.add(new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                for(int y = 0; y < worldHeight; y++)
+                {
+                    for (int x = 0; x < worldWidth; x++)
+                    {
+                        Color color = Config.DEFAULT_COLOR;
+                        if(map[y][x]!=null)
+                            color = map[y][x].draw();
+                        g.setColor(color);
+                        g.drawRect(x*Config.TILE_SIZE, y*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+                        g.fillRect(x*Config.TILE_SIZE, y*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+                    }
+                }
+            }
 
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(mapPanel.getSize());
+            }
+        });
+        mapPanel.revalidate();
+        mapPanel.repaint();
+        System.out.println("ZMIENIONO KOLOR");
     }
 
     @Override

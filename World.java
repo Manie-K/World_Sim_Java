@@ -3,9 +3,11 @@ package World_sim;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import javafx.util.Pair;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Vector;
 
 public abstract class World {
@@ -15,6 +17,7 @@ public abstract class World {
     World(int w, int h){
         worldWidth=w;
         worldHeight = h;
+        organisms =  new Vector<Organism>();
     }
     Vector<Organism> getOrganisms(){return organisms;}
     void setOrganisms( Vector<Organism> val){organisms = val;}
@@ -38,14 +41,14 @@ public abstract class World {
                 currentOrganism.action();
             }
         }
-        organisms.removeIf(null);
+        organisms.removeIf(Objects::isNull);
     }
     abstract Organism getOrganismAtPos(Pair<Integer, Integer> pos);
     abstract Organism getOrganismAtPos(int x, int y);
     abstract void setOrganismAtPos(Pair<Integer, Integer> pos, Organism newOrganism);
     abstract void setOrganismAtPos(int x, int y, Organism newOrganism);
     abstract int getDirectionCount();
-    abstract void drawWorld();
+    abstract void drawWorld(JPanel mapPanel);
     abstract boolean handleAnimalBreeding(Pair<Integer, Integer> partnerPos, Animal caller);
     abstract boolean simulateAnimalMove(int direction, int badTiles,boolean dead, Animal caller);
     abstract int simulatePlantMove(int noGoodTile, final int x, Plant caller);

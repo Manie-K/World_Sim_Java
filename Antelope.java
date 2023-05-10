@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
+
 public class Antelope extends Animal{
     Antelope(World w, Logger l, int s, int a,Pair<Integer, Integer> pos){
         super(w, l, s, Config.ANTELOPE_INIT,a,Config.ANTELOPE_SPEC, pos);
@@ -13,8 +15,8 @@ public class Antelope extends Animal{
     }
 
     @Override
-    void draw() {
-
+    Color draw() {
+        return Config.ANTELOPE_COLOR;
     }
 
     @Override

@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
+
 public class Guarana extends Plant{
     Guarana(World w, Logger l, int a,Pair<Integer, Integer> pos){
         super(w,l,0,a,Config.GUARANA_SPEC,pos);
@@ -11,8 +13,8 @@ public class Guarana extends Plant{
         return new Guarana(w,l,0,pos);
     }
     @Override
-    void draw() {
-
+    Color draw() {
+        return Config.GUARANA_COLOR;
     }
     @Override
     void modify(Organism attacker)

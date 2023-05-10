@@ -60,7 +60,7 @@ public class Simulator {
       makeWindow(windowWidth,windowHeight);
 
       mapPanel = new JPanel();
-      mapPanel.setBackground(Color.BLUE);
+      //mapPanel.setBackground(Color.BLUE);
       mapPanel.setBounds(0,0,w*Config.TILE_SIZE,h*Config.TILE_SIZE);
       window.add(mapPanel);
 
@@ -105,15 +105,17 @@ public class Simulator {
    }
    void run()
    {
-      world.drawWorld();
+
+      world.drawWorld(mapPanel);
       logger.display();
       while (!manager.getQuit())
       {
          manager.reset();
+         System.out.println(manager.getNextTurn()); //WTFFFFFFFFFFFFFFFFff
          if (manager.getNextTurn())
          {
             world.simulateTurn();
-            world.drawWorld();
+            world.drawWorld(mapPanel);
             manager.nextTurn();
             logger.display();
             manager.setNextTurn(false);
@@ -130,7 +132,9 @@ public class Simulator {
    }
    private void setUpWorld()//here are the initial conditions
    {
-
+      Organism o1 = new Dandelion(world,logger,0, new Pair<Integer,Integer>(5,5));
+      //Organism o2 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(12,15));
+     // Organism o3 = new Fox(world,logger,Config.FOX_STRENGTH,0,new Pair<Integer,Integer>(19,19));
    }
    private void save(){
       try {
@@ -139,7 +143,7 @@ public class Simulator {
          world.saveFile(writer);
          writer.close();
          logger.addLog("Pomyslnie zapisano do pliku");
-         world.drawWorld();
+         world.drawWorld(mapPanel);
       }catch (IOException e) {
          throw new RuntimeException(e);
       }
@@ -155,7 +159,7 @@ public class Simulator {
          bufferedReader.close();
          reader.close();
          logger.addLog("Pomyslnie wczytano swiat");
-         world.drawWorld();
+         world.drawWorld(mapPanel);
       } catch (FileNotFoundException e) {
          throw new RuntimeException(e);
       } catch (IOException e) {

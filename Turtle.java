@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
+
 public class Turtle extends Animal{
     Turtle(World w, Logger l, int s,int a, Pair<Integer, Integer> pos){
         super(w, l, s, Config.TURTLE_INIT,a,Config.TURTLE_SPEC, pos);
@@ -13,8 +15,8 @@ public class Turtle extends Animal{
     }
 
     @Override
-    void draw() {
-
+    Color draw() {
+        return Config.TURTLE_COLOR;
     }
 
     @Override

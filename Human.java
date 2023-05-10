@@ -2,6 +2,7 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
 import java.util.Random;
 
 public class Human extends Animal{
@@ -16,8 +17,8 @@ public class Human extends Animal{
         return null; //Human doesn't breed
     }
     @Override
-    void draw() {
-
+    Color draw() {
+        return Config.HUMAN_COLOR;
     }
     @Override
     int howManyMoves()

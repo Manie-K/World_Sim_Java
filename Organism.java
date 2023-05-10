@@ -2,6 +2,7 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,14 +16,6 @@ public abstract class Organism {
 
     public Organism(World w, Logger l, int s,  int i, int a, String spec, Pair<Integer, Integer> pos)
     {
-        try {
-            if (pos.getKey() < 0 || pos.getValue() < 0 || pos.getKey() >= world.worldWidth ||
-                    pos.getValue() >= world.worldHeight)
-                throw new IndexOutOfBoundsException("Creating organism outside of map!");
-        }
-        catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
-        }
         world = w;
         logger = l;
         strength = s;
@@ -30,9 +23,17 @@ public abstract class Organism {
         age = a;
         species = spec;
         position = pos;
+        try {
+            if (pos.getKey() < 0 || pos.getValue() < 0 || pos.getKey() >= world.worldWidth ||
+                    pos.getValue() >= world.worldHeight) {
+                throw new IndexOutOfBoundsException("Creating organism outside of map!");
+            }
+        }
+        catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
         world.getOrganisms().add(this);
         world.setOrganismAtPos(pos, this);
-
     }
     abstract boolean collision(Organism defender);//returns true when the attacker dies
     abstract Organism giveBirth(World w, Logger l,Pair<Integer, Integer> pos);
@@ -53,7 +54,7 @@ public abstract class Organism {
     void setPosition(Pair<Integer, Integer> pos){this.position = pos;}
     void setPosition(int x, int y){this.position = new Pair<Integer,Integer>(x,y);}
     abstract void action();
-    abstract void draw();
+    abstract Color draw();
     void save(FileWriter writer)
     {
         try{

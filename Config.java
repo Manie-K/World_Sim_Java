@@ -1,5 +1,7 @@
 package World_sim;
 
+import java.awt.*;
+
 public class Config {
         public static String SAVE_FILE_NAME = "saveFile.txt";
         public static String GRID_TYPE = "GRID_TYPE";
@@ -34,5 +36,18 @@ public class Config {
         public static final String GUARANA_SPEC = "Guarana";
         public static final String WOLF_BERRIES_SPEC = "WolfBerries";
         public static final String GIANT_HOGWEED_SPEC = "GiantHogweed";
+
+        public static final Color DEFAULT_COLOR = Color.WHITE;
+        public static final Color HUMAN_COLOR = Color.YELLOW;
+        public static final Color ANTELOPE_COLOR = Color.MAGENTA;
+        public static final Color SHEEP_COLOR = Color.GRAY;
+        public static final Color FOX_COLOR = Color.ORANGE;
+        public static final Color TURTLE_COLOR = Color.BLUE;
+        public static final Color WOLF_COLOR = Color.RED;
+        public static final Color DANDELION_COLOR = Color.CYAN;
+        public static final Color GRASS_COLOR = Color.GREEN;
+        public static final Color GUARANA_COLOR = Color.PINK;
+        public static final Color WOLF_BERRIES_COLOR = Color.DARK_GRAY;
+        public static final Color GIANT_HOGWEED_COLOR = Color.BLACK;
 
 }

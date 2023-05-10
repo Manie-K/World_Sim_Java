@@ -2,6 +2,8 @@ package World_sim;
 
 import javafx.util.Pair;
 
+import java.awt.*;
+
 public class GiantHogweed extends Plant{
     GiantHogweed(World w, Logger l, int a,Pair<Integer, Integer> pos){
         super(w,l,0,a,Config.GIANT_HOGWEED_SPEC,pos);
@@ -11,8 +13,8 @@ public class GiantHogweed extends Plant{
         return new GiantHogweed(w,l,0,pos);
     }
     @Override
-    void draw() {
-
+    Color draw() {
+        return Config.GIANT_HOGWEED_COLOR;
     }
     @Override
     boolean kill(Organism attacker) {
