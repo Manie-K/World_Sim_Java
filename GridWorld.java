@@ -279,4 +279,19 @@ public class GridWorld extends World{
     {
         map = tempMap;
     }
+    int getHumanDirection(Pair<Integer,Integer> pos, InputManager input)
+    {
+        int tempDir = input.getHumanDirection(pos);
+        if(tempDir <0 || tempDir >= getDirectionCount())
+            return -1;
+        if(tempDir == 0 && pos.getValue() <= 0)
+            return -1;
+        if(tempDir == 1 && pos.getValue() >= worldHeight-1)
+            return -1;
+        if(tempDir == 2 && pos.getKey() >= worldWidth-1)
+            return -1;
+        if(tempDir == 3 && pos.getKey() <= 0)
+            return -1;
+        return tempDir;
+    }
 }

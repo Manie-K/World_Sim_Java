@@ -12,14 +12,13 @@ public class Simulator {
    private Logger logger;
    private InputManager manager;
    JFrame window;
-   private void setUpWindow(int w, int h)
+   JPanel mapPanel;
+   private void makeWindow(int w, int h)
    {
-      final int windowWidth = 1080;
-      final int windowHeight = 920;
       window = new JFrame("193302 Maciej Góralczyk");
       window.setVisible(true);
       window.setLayout(null);
-      window.setSize(windowWidth,windowHeight);
+      window.setSize(w,h);
       window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
       window.addKeyListener(new KeyAdapter() {
          @Override
@@ -53,8 +52,14 @@ public class Simulator {
             }
          }
       });
+   }
+   private void setUpWindow(int w, int h)
+   {
+      final int windowWidth = 1080;
+      final int windowHeight = 920;
+      makeWindow(windowWidth,windowHeight);
 
-      JPanel mapPanel = new JPanel();
+      mapPanel = new JPanel();
       mapPanel.setBackground(Color.BLUE);
       mapPanel.setBounds(0,0,w*Config.TILE_SIZE,h*Config.TILE_SIZE);
       window.add(mapPanel);
@@ -87,6 +92,7 @@ public class Simulator {
       buttonPanel.add(saveButton);
       buttonPanel.add(loadButton);
       buttonPanel.add(menuButton);
+
       window.add(buttonPanel);
    }
    Simulator(int w, int h)

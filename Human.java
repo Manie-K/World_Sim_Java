@@ -35,6 +35,6 @@ public class Human extends Animal{
     int getDirection() //Won't move into border
     {
         //IMPLEMENT
-        return manager.getHumanDirection(getPosition());
+        return world.getHumanDirection(getPosition(),manager);
     }
 }

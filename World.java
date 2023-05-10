@@ -51,6 +51,7 @@ public abstract class World {
     abstract int simulatePlantMove(int noGoodTile, final int x, Plant caller);
     abstract void killNearbyAnimals(Organism caller);
     abstract void saveFile(FileWriter writer);
+    abstract int getHumanDirection(Pair<Integer,Integer> pos, InputManager input);
     public static World loadNewWorld(Logger logger,BufferedReader reader, InputManager input) {
         try {
             String type = reader.readLine();
