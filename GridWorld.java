@@ -241,16 +241,15 @@ public class GridWorld extends World{
         });
         mapPanel.revalidate();
         mapPanel.repaint();
-        System.out.println("ZMIENIONO KOLOR");
     }
 
     @Override
     void saveFile(FileWriter writer) {
         try {
             int organismCount = getOrganisms().size();
-            writer.write(worldType);
-            writer.write(worldWidth);
-            writer.write(worldHeight);
+            writer.write(worldType+'\n');
+            writer.write(worldWidth+'\n');
+            writer.write(worldHeight+'\n');
             writer.write(organismCount);
             for (Organism org : getOrganisms()) {
                 if(org!=null)

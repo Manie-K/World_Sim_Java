@@ -1,5 +1,6 @@
 package World_sim;
 
+import javax.swing.*;
 import java.util.Vector;
 
 public class Logger {
@@ -11,9 +12,13 @@ public class Logger {
     Logger(  InputManager in, Vector<String> log, boolean add){
 
     }
-    void display()
+    void display(JTextArea logArea)
     {
-
+        logArea.setText("");
+        for(String s : logs)
+        {
+            logArea.append(s + '\n');
+        }
     }
     void textMenu()
     {

@@ -13,6 +13,7 @@ public class Simulator {
    private InputManager manager;
    JFrame window;
    JPanel mapPanel;
+   JTextArea logsArea;
    private void makeWindow(int w, int h)
    {
       window = new JFrame("193302 Maciej Góralczyk");
@@ -60,7 +61,7 @@ public class Simulator {
       makeWindow(windowWidth,windowHeight);
 
       mapPanel = new JPanel();
-      //mapPanel.setBackground(Color.BLUE);
+      mapPanel.setBackground(Color.BLUE);
       mapPanel.setBounds(0,0,w*Config.TILE_SIZE,h*Config.TILE_SIZE);
       window.add(mapPanel);
 
@@ -94,6 +95,14 @@ public class Simulator {
       buttonPanel.add(menuButton);
 
       window.add(buttonPanel);
+
+      JPanel loggerDisplay = new JPanel();
+      loggerDisplay.setBounds(0, h*Config.TILE_SIZE+300,windowWidth-20, 100);
+      logsArea = new JTextArea(Config.LOG_MAX_MESSAGES,60);
+      logsArea.setLineWrap(false);
+      loggerDisplay.add(logsArea);
+      window.add(loggerDisplay);
+
    }
    Simulator(int w, int h)
    {
@@ -105,19 +114,17 @@ public class Simulator {
    }
    void run()
    {
-
       world.drawWorld(mapPanel);
-      logger.display();
+      logger.display(logsArea);
       while (!manager.getQuit())
       {
          manager.reset();
-         System.out.println(manager.getNextTurn()); //WTFFFFFFFFFFFFFFFFff
          if (manager.getNextTurn())
          {
             world.simulateTurn();
             world.drawWorld(mapPanel);
             manager.nextTurn();
-            logger.display();
+            logger.display(logsArea);
             manager.setNextTurn(false);
          }
          else if (manager.getLoad())
@@ -133,8 +140,8 @@ public class Simulator {
    private void setUpWorld()//here are the initial conditions
    {
       Organism o1 = new Dandelion(world,logger,0, new Pair<Integer,Integer>(5,5));
-      //Organism o2 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(12,15));
-     // Organism o3 = new Fox(world,logger,Config.FOX_STRENGTH,0,new Pair<Integer,Integer>(19,19));
+      Organism o2 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(12,15));
+      Organism o3 = new Fox(world,logger,Config.FOX_STRENGTH,0,new Pair<Integer,Integer>(19,19));
    }
    private void save(){
       try {
@@ -143,6 +150,7 @@ public class Simulator {
          world.saveFile(writer);
          writer.close();
          logger.addLog("Pomyslnie zapisano do pliku");
+         System.out.println(logger);
          world.drawWorld(mapPanel);
       }catch (IOException e) {
          throw new RuntimeException(e);

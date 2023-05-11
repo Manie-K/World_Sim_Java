@@ -58,11 +58,11 @@ public abstract class Organism {
     void save(FileWriter writer)
     {
         try{
-        writer.write(strength);
-        writer.write(age);
-        writer.write(species);
-        writer.write(position.getKey());
-        writer.write(position.getValue());
+        writer.write(strength+'\n');
+        writer.write(age+'\n');
+        writer.write(species+'\n');
+        writer.write(position.getKey()+'\n');
+        writer.write(position.getValue()+'\n');
         }catch (IOException e) {
             throw new RuntimeException(e);
         }

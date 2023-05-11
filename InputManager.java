@@ -78,8 +78,8 @@ public class InputManager {
     void saveFile(FileWriter writer)
     {
         try {
-            writer.write(abilityLeft);
-            writer.write(abilityCooldown);
+            writer.write(abilityLeft+'\n');
+            writer.write(abilityCooldown+'\n');
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
