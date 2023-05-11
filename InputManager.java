@@ -26,7 +26,6 @@ public class InputManager {
     }
     void reset()
     {
-        direction = 0;
         quit = save = load = false;
     }
     void ability()
@@ -78,8 +77,8 @@ public class InputManager {
     void saveFile(FileWriter writer)
     {
         try {
-            writer.write(abilityLeft+'\n');
-            writer.write(abilityCooldown+'\n');
+            writer.write(Integer.toString(abilityLeft)+'\n');
+            writer.write(Integer.toString(abilityCooldown)+'\n');
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

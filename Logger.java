@@ -14,11 +14,13 @@ public class Logger {
     }
     void display(JTextArea logArea)
     {
-        logArea.setText("");
+        logArea.setText(null);
         for(String s : logs)
         {
             logArea.append(s + '\n');
         }
+        logs.removeAllElements();
+        logArea.repaint();
     }
     void textMenu()
     {

@@ -228,8 +228,9 @@ public class GridWorld extends World{
                         if(map[y][x]!=null)
                             color = map[y][x].draw();
                         g.setColor(color);
-                        g.drawRect(x*Config.TILE_SIZE, y*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
                         g.fillRect(x*Config.TILE_SIZE, y*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+                        g.setColor(Color.BLACK);
+                        g.drawRect(x*Config.TILE_SIZE, y*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
                     }
                 }
             }
@@ -238,7 +239,7 @@ public class GridWorld extends World{
             public Dimension getPreferredSize() {
                 return new Dimension(mapPanel.getSize());
             }
-        });
+        },BorderLayout.CENTER);
         mapPanel.revalidate();
         mapPanel.repaint();
     }
@@ -248,9 +249,9 @@ public class GridWorld extends World{
         try {
             int organismCount = getOrganisms().size();
             writer.write(worldType+'\n');
-            writer.write(worldWidth+'\n');
-            writer.write(worldHeight+'\n');
-            writer.write(organismCount);
+            writer.write(Integer.toString(worldWidth)+'\n');
+            writer.write(Integer.toString(worldHeight)+'\n');
+            writer.write(Integer.toString(organismCount)+'\n');
             for (Organism org : getOrganisms()) {
                 if(org!=null)
                     org.save(writer);

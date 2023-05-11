@@ -2,6 +2,7 @@ package World_sim;
 import javafx.util.Pair;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,7 +22,19 @@ public class Simulator {
       window.setLayout(null);
       window.setSize(w,h);
       window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-      window.addKeyListener(new KeyAdapter() {
+
+   }
+   private void setUpWindow(int w, int h)
+   {
+      final int windowWidth = 1080;
+      final int windowHeight = 920;
+      makeWindow(windowWidth,windowHeight);
+
+      mapPanel = new JPanel();
+      mapPanel.setBackground(Color.BLUE);
+      mapPanel.setBounds(0,0,w*Config.TILE_SIZE,h*Config.TILE_SIZE);
+      mapPanel.setLayout(new BorderLayout());
+      mapPanel.addKeyListener(new KeyAdapter() {
          @Override
          public void keyReleased(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -53,16 +66,6 @@ public class Simulator {
             }
          }
       });
-   }
-   private void setUpWindow(int w, int h)
-   {
-      final int windowWidth = 1080;
-      final int windowHeight = 920;
-      makeWindow(windowWidth,windowHeight);
-
-      mapPanel = new JPanel();
-      mapPanel.setBackground(Color.BLUE);
-      mapPanel.setBounds(0,0,w*Config.TILE_SIZE,h*Config.TILE_SIZE);
       window.add(mapPanel);
 
       JPanel buttonPanel = new JPanel();
@@ -97,7 +100,8 @@ public class Simulator {
       window.add(buttonPanel);
 
       JPanel loggerDisplay = new JPanel();
-      loggerDisplay.setBounds(0, h*Config.TILE_SIZE+300,windowWidth-20, 100);
+      loggerDisplay.setBounds(0, h*Config.TILE_SIZE+250,windowWidth-20, 250);
+
       logsArea = new JTextArea(Config.LOG_MAX_MESSAGES,60);
       logsArea.setLineWrap(false);
       loggerDisplay.add(logsArea);
@@ -118,6 +122,8 @@ public class Simulator {
       logger.display(logsArea);
       while (!manager.getQuit())
       {
+         mapPanel.setFocusable(true);
+         mapPanel.requestFocus();
          manager.reset();
          if (manager.getNextTurn())
          {
@@ -150,7 +156,7 @@ public class Simulator {
          world.saveFile(writer);
          writer.close();
          logger.addLog("Pomyslnie zapisano do pliku");
-         System.out.println(logger);
+         logger.display(logsArea);
          world.drawWorld(mapPanel);
       }catch (IOException e) {
          throw new RuntimeException(e);
@@ -161,12 +167,14 @@ public class Simulator {
          File file = new File(Config.SAVE_FILE_NAME);
          FileReader reader = new FileReader(file);
          BufferedReader bufferedReader = new BufferedReader(reader);
+         mapPanel.removeAll();
          manager = manager.loadFile(bufferedReader);
          logger = new Logger(manager);
          world = World.loadNewWorld(logger,bufferedReader, manager);
          bufferedReader.close();
          reader.close();
          logger.addLog("Pomyslnie wczytano swiat");
+         logger.display(logsArea);
          world.drawWorld(mapPanel);
       } catch (FileNotFoundException e) {
          throw new RuntimeException(e);

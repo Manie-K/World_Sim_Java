@@ -58,7 +58,7 @@ public abstract class World {
     public static World loadNewWorld(Logger logger,BufferedReader reader, InputManager input) {
         try {
             String type = reader.readLine();
-            if(type == Config.GRID_TYPE)
+            if(type.equals(Config.GRID_TYPE))
                 return GridWorld.load(logger,reader,input);
         } catch (IOException e) {
             throw new RuntimeException(e);

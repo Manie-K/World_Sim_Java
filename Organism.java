@@ -58,11 +58,11 @@ public abstract class Organism {
     void save(FileWriter writer)
     {
         try{
-        writer.write(strength+'\n');
-        writer.write(age+'\n');
         writer.write(species+'\n');
-        writer.write(position.getKey()+'\n');
-        writer.write(position.getValue()+'\n');
+        writer.write(Integer.toString(strength)+'\n');
+        writer.write(Integer.toString(age)+'\n');
+        writer.write(Integer.toString(position.getKey())+'\n');
+        writer.write(Integer.toString(position.getValue())+'\n');
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -73,38 +73,39 @@ public abstract class Organism {
             int strength, age, posF, posS;
             String spec;
             String line;
-            line = reader.readLine();
-            strength = Integer.valueOf(line);
-            line = reader.readLine();
-            age = Integer.valueOf(line);
             spec = reader.readLine();
             line = reader.readLine();
-            posF = Integer.valueOf(line);
+            strength = Integer.parseInt(line);
             line = reader.readLine();
-            posS = Integer.valueOf(line);
+            age = Integer.parseInt(line);
+            line = reader.readLine();
+            posF = Integer.parseInt(line);
+            line = reader.readLine();
+            posS = Integer.parseInt(line);
+
 
             Pair<Integer,Integer> pos = new Pair<>(posF,posS);
-            if (spec == Config.WOLF_SPEC)
+            if (spec.equals(Config.WOLF_SPEC))
                 return new Wolf(wor, log, strength,age,pos);
-            if (spec == Config.SHEEP_SPEC)
+            if (spec.equals(Config.SHEEP_SPEC))
                 return new Sheep(wor, log, strength,age,pos);
-            if (spec == Config.FOX_SPEC)
+            if (spec.equals(Config.FOX_SPEC))
                 return new Fox(wor, log, strength,age,pos);
-            if (spec == Config.TURTLE_SPEC)
+            if (spec.equals(Config.TURTLE_SPEC))
                 return new Turtle(wor, log, strength,age,pos);
-            if (spec == Config.ANTELOPE_SPEC)
+            if (spec.equals(Config.ANTELOPE_SPEC))
                 return new Antelope(wor, log, strength,age,pos);
-            if (spec == Config.HUMAN_SPEC)
+            if (spec.equals(Config.HUMAN_SPEC))
                 return new Human(wor, log,input, strength,age,pos);
-            if (spec == Config.GRASS_SPEC)
+            if (spec.equals(Config.GRASS_SPEC))
                 return new Grass(wor, log,age, pos);
-            if (spec == Config.DANDELION_SPEC)
+            if (spec.equals(Config.DANDELION_SPEC))
                 return new Dandelion(wor, log,age, pos);
-            if (spec == Config.GUARANA_SPEC)
+            if (spec.equals(Config.GUARANA_SPEC))
                 return new Guarana(wor, log,age, pos);
-            if (spec == Config.WOLF_BERRIES_SPEC)
+            if (spec.equals(Config.WOLF_BERRIES_SPEC))
                 return new WolfBerries(wor, log,age, pos);
-            if (spec == Config.GIANT_HOGWEED_SPEC)
+            if (spec.equals(Config.GIANT_HOGWEED_SPEC))
                 return new GiantHogweed(wor, log,age, pos);
             return null;
         } catch (IOException e) {
