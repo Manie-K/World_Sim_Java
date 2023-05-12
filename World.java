@@ -35,11 +35,11 @@ public abstract class World {
     void simulateTurn() {
         organisms.sort((Organism o1, Organism o2) -> {
             if (o1.getInitiative() == o2.getInitiative()) {
-                return Integer.compare(o1.getInitiative(), o2.getInitiative());
+                return Integer.compare(o2.getAge(), o1.getAge());
             } else {
-                return Integer.compare(o1.getAge(), o2.getAge());
+                return Integer.compare(o2.getInitiative(), o1.getInitiative());
             }
-        });
+        });//FIX THIS
         int fixedSize = organisms.size();
         for (int i = 0; i < fixedSize; i++) {
             Organism currentOrganism = organisms.get(i);

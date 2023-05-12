@@ -49,5 +49,23 @@ public class Config {
         public static final Color GUARANA_COLOR = Color.PINK;
         public static final Color WOLF_BERRIES_COLOR = Color.DARK_GRAY;
         public static final Color GIANT_HOGWEED_COLOR = Color.BLACK;
-
+        public static final String MENU_TEXT = "MACIEJ GÓRALCZYK 193302 \n " +
+                "-------STEROWANIE-------\n" +
+                "P                      ->      Umiejętność spejcalna\n" +
+                "Strzałka w góre        ->      Góra\n" +
+                "Strzałka w dół         ->      Dół\n" +
+                "Strzałka w prawo       ->      Prawo\n" +
+                "Strzałka w lewo        ->      Lewo\n" +
+                "-------INFO-------\n" +
+                "Żółty          ->      Czlowiek\n" +
+                "Czerwony       ->      Wilk\n" +
+                "Magenta        ->      Antylopa\n" +
+                "Owca           ->      Szary\n" +
+                "Pomarańczowy   ->      Lis\n" +
+                "Niebieski      ->      Żółw\n" +
+                "Zielony        ->      Trawa\n" +
+                "Jasnoniebieski ->      Mlecz\n" +
+                "Różowy         ->      Guarana\n" +
+                "Ciemno szary   ->      Wilcze jagody\n" +
+                "Czarny         ->      Barszcz Sosnowskiego\n";
 }

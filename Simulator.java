@@ -12,6 +12,19 @@ public class Simulator {
    JFrame window;
    JPanel mapPanel;
    JTextArea logsArea;
+   Simulator(Pair<Integer,Integer> pos, int type)
+   {
+      int w = pos.getKey();
+      int h = pos.getValue();
+      manager = new InputManager(0,0);
+      logger = new Logger(manager);
+      if(type == 0)
+         world = new GridWorld(w, h);
+      //else if(type == 1)
+        // world = new HexWorld(w,h);
+      setUpWindow(w,h);
+      setUpWorld();
+   }
    private void setUpMapPanel(int w, int h)
    {
       mapPanel = new JPanel();
@@ -100,6 +113,9 @@ public class Simulator {
       loadButton.addActionListener(e->{
          load();
       });
+      menuButton.addActionListener(e->{
+         showMenu();
+      });
 
       buttonPanel.add(saveButton);
       buttonPanel.add(loadButton);
@@ -115,14 +131,6 @@ public class Simulator {
       loggerDisplay.add(logsArea);
       window.add(loggerDisplay);
 
-   }
-   Simulator(int w, int h)
-   {
-      manager = new InputManager(0,0);
-      logger = new Logger(manager);
-      world = new GridWorld(w, h);
-      setUpWindow(w,h);
-      setUpWorld();
    }
    void run()
    {
@@ -184,10 +192,30 @@ public class Simulator {
          logger.addLog("Pomyslnie wczytano swiat");
          logger.display(logsArea);
          world.drawWorld(mapPanel);
-      } catch (FileNotFoundException e) {
-         throw new RuntimeException(e);
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
+   }
+   private void showMenu()
+   {
+      JFrame frame = new JFrame("MENU");
+      frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+      JTextArea textArea = new JTextArea(Config.MENU_TEXT);
+      textArea.setEditable(false);
+      textArea.setLineWrap(true);
+      textArea.setWrapStyleWord(true);
+      textArea.setPreferredSize(new Dimension(400, 600));
+
+      frame.getContentPane().add(textArea);
+      frame.pack();
+
+      Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+      int x = (screenSize.width - textArea.getWidth()-100);
+      int y = (screenSize.height - frame.getHeight()) / 2;
+
+      frame.setLocation(x, y);
+      frame.setVisible(true);
    }
 }
