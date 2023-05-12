@@ -19,126 +19,138 @@ public class HexWorld extends World{
         map = new Organism[h][w];
     }
     @Override
-    boolean simulateAnimalMove(int direction, int badTiles,boolean dead, Animal caller){
-        if (direction == 0 && caller.getPosition().getValue() > 0 && (badTiles & (1 << direction))==0)//up
+    boolean simulateAnimalMove(int direction, int[] badTiles,boolean[] dead, Animal caller){
+        boolean evenRow = caller.getPosition().getValue()%2==0;
+        Pair<Integer,Integer> tempPos;
+        if (direction == 0 && caller.getPosition().getValue() > 0 && (badTiles[0] & (1 << direction))==0)//up
         {
-            if (getOrganismAtPos(caller.getPosition().getKey(), caller.getPosition().getValue() - 1 ) == null)
+            tempPos = new Pair<>(caller.getPosition().getKey(), caller.getPosition().getValue() - 1 );
+            if(evenRow)
+                tempPos= new Pair<>(caller.getPosition().getKey()-1, caller.getPosition().getValue() - 1 );
+            if(tempPos.getKey() < 0) {
+                badTiles[0] |= (1 << direction);
+                return false;
+            }
+            if (getOrganismAtPos(tempPos) == null)
             {
-                setOrganismAtPos(caller.getPosition(),null);
-                caller.setPosition(caller.getPosition().getKey(), caller.getPosition().getValue()-1);
-                setOrganismAtPos(caller.getPosition(),caller);
+                if(evenRow)
+                    return moveOrganism(caller,-1,-1);
+                return moveOrganism(caller,0,-1);
+            }
+            else if (!caller.goodSmell((getOrganismAtPos(tempPos))))
+            {
+                dead[0] = caller.collision(getOrganismAtPos(tempPos));
                 return true;
             }
-            else if (!caller.goodSmell((getOrganismAtPos(caller.getPosition().getKey(),
-                    caller.getPosition().getValue() - 1 ))))
-            {
-                dead = caller.collision(getOrganismAtPos(caller.getPosition().getKey(),
-                        caller.getPosition().getValue() - 1 ));
-                return true;
-            }
-            else badTiles|=(1<<direction);
+            else badTiles[0]|=(1<<direction);
         }
 
-        else if (direction == 1 && caller.getPosition().getValue() < worldHeight - 1 && (badTiles & (1 << direction))==0)//bottom
+        else if (direction == 1 && caller.getPosition().getValue() < worldHeight - 1 &&
+                (badTiles[0] & (1 << direction))==0)//bottom
         {
-            if (getOrganismAtPos(caller.getPosition().getKey(),caller.getPosition().getValue() + 1 ) == null)
+            tempPos = new Pair<>(caller.getPosition().getKey(), caller.getPosition().getValue() + 1 );
+            if(evenRow)
+                tempPos= new Pair<>(caller.getPosition().getKey()-1, caller.getPosition().getValue() + 1 );
+            if(tempPos.getKey() < 0) {
+                badTiles[0] |= (1 << direction);
+                return false;
+            }
+            if (getOrganismAtPos(tempPos) == null)
             {
-                setOrganismAtPos(caller.getPosition(),null);
-                caller.setPosition(caller.getPosition().getKey(), caller.getPosition().getValue()+1);
-                setOrganismAtPos(caller.getPosition(),caller);
+                if(evenRow)
+                    return moveOrganism(caller,-1,1);
+                return moveOrganism(caller,0,1);
+            }
+            else if (!caller.goodSmell((getOrganismAtPos(tempPos))))
+            {
+                dead[0] = caller.collision(getOrganismAtPos(tempPos));
                 return true;
             }
-            else if (!caller.goodSmell((getOrganismAtPos(caller.getPosition().getKey(),
-                    caller.getPosition().getValue() + 1))))
-            {
-                dead = caller.collision(getOrganismAtPos(caller.getPosition().getKey(),
-                        caller.getPosition().getValue() + 1 ));
-                return true;
-            }
-            else badTiles |= (1 << direction);
+            else badTiles[0] |= (1 << direction);
         }
 
-        else if (direction == 2 && caller.getPosition().getKey() < worldWidth - 1 && (badTiles & (1 << direction))==0)//right
+        else if (direction == 2 && caller.getPosition().getKey() < worldWidth - 1 &&
+                (badTiles[0] & (1 << direction))==0)//right
         {
-            if (getOrganismAtPos(caller.getPosition().getKey() + 1,caller.getPosition().getValue() ) == null)
+            tempPos = new Pair<>(caller.getPosition().getKey()+1, caller.getPosition().getValue() );
+            if (getOrganismAtPos(tempPos) == null)
             {
-                setOrganismAtPos(caller.getPosition(),null);
-                caller.setPosition(caller.getPosition().getKey()+1, caller.getPosition().getValue());
-                setOrganismAtPos(caller.getPosition(),caller);
+                return moveOrganism(caller,1,0);
+            }
+            else if (!caller.goodSmell((getOrganismAtPos(tempPos))))
+            {
+                dead[0] = caller.collision(getOrganismAtPos(tempPos));
                 return true;
             }
-            else if (!caller.goodSmell((getOrganismAtPos(caller.getPosition().getKey() + 1,
-                    caller.getPosition().getValue()))))
-            {
-                dead = caller.collision(getOrganismAtPos(caller.getPosition().getKey() + 1,
-                        caller.getPosition().getValue() ));
-                return true;
-            }
-            else badTiles |= (1 << direction);
+            else badTiles[0] |= (1 << direction);
         }
 
-        else if (direction == 3 && caller.getPosition().getKey() > 0 && (badTiles & (1 << direction))==0)//left
+        else if (direction == 3 && caller.getPosition().getKey() > 0 && (badTiles[0] & (1 << direction))==0)//left
         {
-            if (getOrganismAtPos(caller.getPosition().getKey() - 1,caller.getPosition().getValue() ) == null)
+            tempPos = new Pair<>(caller.getPosition().getKey()-1, caller.getPosition().getValue() );
+            if (getOrganismAtPos(tempPos) == null)
             {
-                setOrganismAtPos(caller.getPosition(),null);
-                caller.setPosition(caller.getPosition().getKey()-1, caller.getPosition().getValue());
-                setOrganismAtPos(caller.getPosition(),caller);
+                return moveOrganism(caller,-1,0);
+            }
+            else if (!caller.goodSmell((getOrganismAtPos( tempPos))))
+            {
+                dead[0] = caller.collision(getOrganismAtPos( tempPos));
                 return true;
             }
-            else if (!caller.goodSmell((getOrganismAtPos( caller.getPosition().getKey() - 1,
-                    caller.getPosition().getValue() ))))
-            {
-                dead = caller.collision(getOrganismAtPos( caller.getPosition().getKey() - 1,
-                        caller.getPosition().getValue() ));
-                return true;
-            }
-            else badTiles |= (1 << direction);
+            else badTiles[0] |= (1 << direction);
         }
 
         else if (direction == 4 && caller.getPosition().getKey() < worldWidth - 1 &&
-                caller.getPosition().getValue() > 0 && (badTiles & (1 << direction))==0)//Top right
+                caller.getPosition().getValue() > 0 && (badTiles[0] & (1 << direction))==0)//Top right
         {
-            if (getOrganismAtPos(caller.getPosition().getKey() + 1,caller.getPosition().getValue() -1) == null)
+            tempPos = new Pair<>(caller.getPosition().getKey()+1, caller.getPosition().getValue()-1 );
+            if(evenRow)
+                tempPos= new Pair<>(caller.getPosition().getKey(), caller.getPosition().getValue() - 1 );
+            if(tempPos.getKey() < 0) {
+                badTiles[0] |= (1 << direction);
+                return false;
+            }
+            if (getOrganismAtPos(tempPos) == null)
             {
-                setOrganismAtPos(caller.getPosition(),null);
-                caller.setPosition(caller.getPosition().getKey()+1, caller.getPosition().getValue()-1);
-                setOrganismAtPos(caller.getPosition(),caller);
+                if(evenRow)
+                    return moveOrganism(caller,0,-1);
+                return moveOrganism(caller,1,-1);
+            }
+            else if (!caller.goodSmell((getOrganismAtPos( tempPos))))
+            {
+                dead[0] = caller.collision(getOrganismAtPos( tempPos));
                 return true;
             }
-            else if (!caller.goodSmell((getOrganismAtPos( caller.getPosition().getKey() + 1,
-                    caller.getPosition().getValue() -1))))
-            {
-                dead = caller.collision(getOrganismAtPos( caller.getPosition().getKey() + 1,
-                        caller.getPosition().getValue() -1));
-                return true;
-            }
-            else badTiles |= (1 << direction);
+            else badTiles[0] |= (1 << direction);
         }
 
         else if (direction == 5 && caller.getPosition().getKey() < worldWidth - 1 &&
-                caller.getPosition().getValue() < worldHeight - 1&& (badTiles & (1 << direction))==0)//Bottom right
+                caller.getPosition().getValue() < worldHeight - 1&& (badTiles[0] & (1 << direction))==0)//Bottom right
         {
-            if (getOrganismAtPos(caller.getPosition().getKey() + 1,caller.getPosition().getValue() +1) == null)
+            tempPos = new Pair<>(caller.getPosition().getKey()+1, caller.getPosition().getValue()+1 );
+            if(evenRow)
+                tempPos= new Pair<>(caller.getPosition().getKey(), caller.getPosition().getValue() + 1 );
+            if(tempPos.getKey() < 0) {
+                badTiles[0] |= (1 << direction);
+                return false;
+            }
+            if (getOrganismAtPos(tempPos) == null)
             {
-                setOrganismAtPos(caller.getPosition(),null);
-                caller.setPosition(caller.getPosition().getKey()+1, caller.getPosition().getValue()-1);
-                setOrganismAtPos(caller.getPosition(),caller);
+                if(evenRow)
+                    return moveOrganism(caller,0,1);
+                return moveOrganism(caller,1,1);
+            }
+            else if (!caller.goodSmell((getOrganismAtPos( tempPos))))
+            {
+                dead[0] = caller.collision(getOrganismAtPos( tempPos));
                 return true;
             }
-            else if (!caller.goodSmell((getOrganismAtPos( caller.getPosition().getKey() + 1,
-                    caller.getPosition().getValue() + 1))))
-            {
-                dead = caller.collision(getOrganismAtPos( caller.getPosition().getKey() + 1,
-                        caller.getPosition().getValue() + 1));
-                return true;
-            }
-            else badTiles |= (1 << direction);
+            else badTiles[0] |= (1 << direction);
         }
 
         else
         {
-            badTiles |= (1 << direction);
+            badTiles[0] |= (1 << direction);
         }
         return false;
     }
@@ -147,6 +159,7 @@ public class HexWorld extends World{
     {
         Pair<Integer, Integer> pos = partnerPos;
         for (int i = 0; i < 2; i++) {
+            boolean evenRow = pos.getValue()%2==0;
             if (pos.getValue() > 0 &&getOrganismAtPos(pos.getKey(), pos.getValue() - 1) == null)
             {
                 caller.giveBirth(this, caller.logger, new Pair<>(pos.getKey(), pos.getValue() - 1 ));
@@ -168,17 +181,31 @@ public class HexWorld extends World{
                 return true;
             }
             //top right
-            if (pos.getKey() < worldWidth- 1 &&pos.getValue() > 0&&
+            if (!evenRow && pos.getKey() < worldWidth- 1 &&pos.getValue() > 0&&
                     getOrganismAtPos( pos.getKey() + 1, pos.getValue()-1 ) == null)
             {
                 caller.giveBirth(this, caller.logger, new Pair<>(pos.getKey()+1, pos.getValue()-1));
                 return true;
             }
+            //top left
+            if (evenRow && pos.getKey() > 0 &&pos.getValue() > 0&&
+                    getOrganismAtPos( pos.getKey() - 1, pos.getValue()-1 ) == null)
+            {
+                caller.giveBirth(this, caller.logger, new Pair<>(pos.getKey()-1, pos.getValue()-1));
+                return true;
+            }
             //bottom right
-            if (pos.getKey() < worldWidth- 1 &&pos.getValue() < worldHeight - 1 &&
+            if (!evenRow && pos.getKey() < worldWidth- 1 &&pos.getValue() < worldHeight - 1 &&
                     getOrganismAtPos( pos.getKey() + 1, pos.getValue()+1 ) == null)
             {
                 caller.giveBirth(this, caller.logger, new Pair<>(pos.getKey()+1, pos.getValue()+1));
+                return true;
+            }
+            //bottom left
+            if (evenRow && pos.getKey() > 0 &&pos.getValue() < worldHeight - 1 &&
+                    getOrganismAtPos( pos.getKey() - 1, pos.getValue()+1 ) == null)
+            {
+                caller.giveBirth(this, caller.logger, new Pair<>(pos.getKey()-1, pos.getValue()+1));
                 return true;
             }
             pos = caller.getPosition(); //second loop iteration will look at tiles near this organism
@@ -189,12 +216,14 @@ public class HexWorld extends World{
     int simulatePlantMove(int noGoodTile, final int x, Plant caller)
     {
         int dir = new Random().nextInt(getDirectionCount());
+        boolean evenRow = caller.getPosition().getValue()%2==0;
+        Pair<Integer,Integer> tempPos;
         if (dir == 0) //TOP
         {
-            if (caller.getPosition().getValue() > 0 && getOrganismAtPos
-                    (new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()-1)) == null)
+            tempPos =new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()-1);
+            if (caller.getPosition().getValue() > 0 && getOrganismAtPos(tempPos) == null)
             {
-                caller.sow(new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()-1));
+                caller.sow(tempPos);
                 noGoodTile = x;
             }
             else
@@ -202,10 +231,10 @@ public class HexWorld extends World{
         }
         else if (dir == 1) //BOTTOM
         {
-            if (caller.getPosition().getValue() < worldHeight - 1 && getOrganismAtPos
-                    (new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()+1)) == null)
+            tempPos =new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()+1);
+            if (caller.getPosition().getValue() < worldHeight - 1 && getOrganismAtPos(tempPos) == null)
             {
-                caller.sow(new Pair<>(caller.getPosition().getKey(),caller.getPosition().getValue()+1));
+                caller.sow(tempPos);
                 noGoodTile = x;
             }
             else
@@ -213,10 +242,10 @@ public class HexWorld extends World{
         }
         else if (dir == 2) //RIGHT
         {
-            if (caller.getPosition().getKey() < worldWidth - 1 && getOrganismAtPos
-                    (new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue())) == null)
+            tempPos =new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue());
+            if (caller.getPosition().getKey() < worldWidth - 1 && getOrganismAtPos(tempPos) == null)
             {
-                caller.sow(new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue()));
+                caller.sow(tempPos);
                 noGoodTile = x;
             }
             else
@@ -224,32 +253,58 @@ public class HexWorld extends World{
         }
         else if (dir == 3) //LEFT
         {
-            if (caller.getPosition().getKey() > 0 && getOrganismAtPos
-                    (new Pair<>(caller.getPosition().getKey()-1,caller.getPosition().getValue())) == null)
+            tempPos =new Pair<>(caller.getPosition().getKey()-1,caller.getPosition().getValue());
+            if (caller.getPosition().getKey() > 0 && getOrganismAtPos(tempPos) == null)
             {
-                caller.sow(new Pair<>(caller.getPosition().getKey()-1,caller.getPosition().getValue()));
+                caller.sow(tempPos);
                 noGoodTile = x;
             }
             else
                 noGoodTile = noGoodTile | (1 << dir);
         }
-        else if (dir == 4) //TOP RIGHT
+        else if (!evenRow && dir == 4) //TOP RIGHT
         {
+            tempPos =new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue()-1);
             if (caller.getPosition().getKey() < worldWidth - 1 && caller.getPosition().getValue() > 0 &&
-                    getOrganismAtPos(new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue()-1)) == null)
+                    getOrganismAtPos(tempPos) == null)
             {
-                caller.sow(new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue()-1));
+                caller.sow(tempPos);
                 noGoodTile = x;
             }
             else
                 noGoodTile = noGoodTile | (1 << dir);
         }
-        else if (dir == 5) //BOTTOM RIGHT
+        else if (evenRow && dir == 4) //TOP RIGHT
         {
-            if (caller.getPosition().getKey() < worldWidth - 1 && caller.getPosition().getValue() < worldHeight - 1 &&
-                    getOrganismAtPos(new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue()+1)) == null)
+            tempPos =new Pair<>(caller.getPosition().getKey()-1,caller.getPosition().getValue()-1);
+            if (caller.getPosition().getKey() >0 && caller.getPosition().getValue() > 0 &&
+                    getOrganismAtPos(tempPos) == null)
             {
-                caller.sow(new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue()+1));
+                caller.sow(tempPos);
+                noGoodTile = x;
+            }
+            else
+                noGoodTile = noGoodTile | (1 << dir);
+        }
+        else if (!evenRow && dir == 5) //BOTTOM RIGHT
+        {
+            tempPos =new Pair<>(caller.getPosition().getKey()+1,caller.getPosition().getValue()+1);
+            if (caller.getPosition().getKey() < worldWidth - 1 && caller.getPosition().getValue() < worldHeight - 1 &&
+                    getOrganismAtPos(tempPos) == null)
+            {
+                caller.sow(tempPos);
+                noGoodTile = x;
+            }
+            else
+                noGoodTile = noGoodTile | (1 << dir);
+        }
+        else if (evenRow && dir == 5) //BOTTOM LEFT
+        {
+            tempPos =new Pair<>(caller.getPosition().getKey()-1,caller.getPosition().getValue()+1);
+            if (caller.getPosition().getKey() > 0 && caller.getPosition().getValue() < worldHeight - 1 &&
+                    getOrganismAtPos(tempPos) == null)
+            {
+                caller.sow(tempPos);
                 noGoodTile = x;
             }
             else
@@ -261,37 +316,37 @@ public class HexWorld extends World{
     void killNearbyAnimals(Organism caller)
     {
         Pair<Integer,Integer> position = caller.getPosition();
-
+        boolean evenRow = position.getValue()%2==0;
         position = new Pair<>(position.getKey(), position.getValue()-1);
-        if (position.getValue() > 0 && getOrganismAtPos(position) instanceof Animal)
+        if (position.getValue() >= 0 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
 
         position = new Pair<>(position.getKey(), position.getValue()+1);
-        if (position.getValue() < worldHeight - 1 && getOrganismAtPos(position) instanceof Animal)
+        if (position.getValue() <= worldHeight - 1 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
 
         position = new Pair<>(position.getKey()+1, position.getValue());
-        if (position.getKey() < worldWidth - 1 && getOrganismAtPos(position) instanceof Animal)
+        if (position.getKey() <= worldWidth - 1 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
 
         position = new Pair<>(position.getKey()-1, position.getValue());
-        if (position.getKey() > 0 && getOrganismAtPos(position) instanceof Animal)
+        if (position.getKey() >= 0 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
 
         position = new Pair<>(position.getKey()+1, position.getValue()-1);
-        if (position.getKey() < worldWidth - 1 &&position.getValue() > 0
+        if (!evenRow && position.getKey() <= worldWidth - 1 &&position.getValue() >= 0
                 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
@@ -299,7 +354,22 @@ public class HexWorld extends World{
         }
 
         position = new Pair<>(position.getKey()+1, position.getValue()+1);
-        if (position.getKey() < worldWidth - 1 &&position.getValue() < worldHeight - 1
+        if (!evenRow && position.getKey() <= worldWidth - 1 &&position.getValue() <= worldHeight - 1
+                && getOrganismAtPos(position) instanceof Animal)
+        {
+            caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
+            caller.killOrganism(getOrganismAtPos(position));
+        }
+        position = new Pair<>(position.getKey()-1, position.getValue()-1);
+        if (evenRow && position.getKey() >= 0 && position.getValue() >= 0
+                && getOrganismAtPos(position) instanceof Animal)
+        {
+            caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
+            caller.killOrganism(getOrganismAtPos(position));
+        }
+
+        position = new Pair<>(position.getKey()-1, position.getValue()+1);
+        if (evenRow && position.getKey() >= 0 && position.getValue() <= worldHeight - 1
                 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
@@ -311,48 +381,49 @@ public class HexWorld extends World{
         Pair<Integer,Integer> tempPos = defender.getPosition();
         int positionFirst = tempPos.getKey();
         int positionSecond = tempPos.getValue();
+        boolean evenRow = positionSecond % 2 == 0;
+
         if (positionSecond > 0 &&
                 getOrganismAtPos(positionFirst,positionSecond - 1) == null)
         {
-            setOrganismAtPos(tempPos,null);
-            defender.setPosition(positionFirst,positionSecond-1);
-            setOrganismAtPos(defender.getPosition(),defender);
+            moveOrganism(defender,0,-1);
         }
         else if (positionSecond < worldHeight-1 &&
                 getOrganismAtPos(positionFirst,positionSecond + 1) == null)
         {
-            setOrganismAtPos(tempPos,null);
-            defender.setPosition(positionFirst,positionSecond+1);
-            setOrganismAtPos(defender.getPosition(),defender);
+            moveOrganism(defender,0,1);
         }
         else if (positionFirst < worldWidth-1 &&
                 getOrganismAtPos(positionFirst+1,positionSecond) == null)
         {
-            setOrganismAtPos(tempPos,null);
-            defender.setPosition(positionFirst+1,positionSecond);
-            setOrganismAtPos(defender.getPosition(),defender);
+            moveOrganism(defender,1,0);
         }
         else if (positionFirst > 0 &&
                 getOrganismAtPos(positionFirst - 1,positionSecond ) == null)
         {
-            setOrganismAtPos(tempPos,null);
-            defender.setPosition(positionFirst-1,positionSecond);
-            setOrganismAtPos(defender.getPosition(),defender);
+            moveOrganism(defender,-1,0);
         }
-        else if (positionFirst < worldWidth-1 && positionSecond > 0 &&
+        else if (!evenRow && positionFirst < worldWidth-1 && positionSecond > 0 &&
                 getOrganismAtPos(positionFirst + 1,positionSecond-1 ) == null)
         {
-            setOrganismAtPos(tempPos,null);
-            defender.setPosition(positionFirst+1,positionSecond-1);
-            setOrganismAtPos(defender.getPosition(),defender);
+            moveOrganism(defender,1,-1);
         }
-        else if (positionFirst < worldWidth-1 && positionSecond < worldHeight-1 &&
+        else if (!evenRow && positionFirst < worldWidth-1 && positionSecond < worldHeight-1 &&
                 getOrganismAtPos(positionFirst + 1,positionSecond +1) == null)
         {
-            setOrganismAtPos(tempPos,null);
-            defender.setPosition(positionFirst+1,positionSecond+1);
-            setOrganismAtPos(defender.getPosition(),defender);
+            moveOrganism(defender,1,1);
         }
+        else if (evenRow && positionFirst >0 && positionSecond > 0 &&
+                getOrganismAtPos(positionFirst + 1,positionSecond-1 ) == null)
+        {
+            moveOrganism(defender,-1,-1);
+        }
+        else if (evenRow && positionFirst > 0 && positionSecond < worldHeight-1 &&
+                getOrganismAtPos(positionFirst + 1,positionSecond +1) == null)
+        {
+            moveOrganism(defender,-1,1);
+        }
+
         else
             return false; //no empty tile
 
@@ -417,7 +488,7 @@ public class HexWorld extends World{
     int getMapHeight(){
         int h = worldHeight;
         int x = Config.TILE_SIZE;
-        if(h==1)
+        /*if(h==1)
             return x;
         else if(h%2 == 0)
         {
@@ -426,7 +497,16 @@ public class HexWorld extends World{
         else
         {
             return (x*((h-1)/2)*7)/3;
+        }*/
+        int sum = 0;
+        for(int i = 0; i < h; i++)
+        {
+            if(i%2==0)
+                sum += x;
+            else
+                sum += x/3;
         }
+        return sum + x/3;
     }
     @Override
     void drawWorld(JPanel mapPanel) {
@@ -577,6 +657,7 @@ public class HexWorld extends World{
         int tempDir = input.getHumanDirection(pos);
         if(tempDir <0 || tempDir >= getDirectionCount())
             return -1;
+
         if(tempDir == 0 && pos.getValue() <= 0)
             return -1;
         if(tempDir == 1 && pos.getValue() >= worldHeight-1)

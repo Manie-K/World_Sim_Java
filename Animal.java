@@ -15,20 +15,20 @@ abstract class Animal extends Organism {
         int moves = howManyMoves();
         float chanceToNotMove = chanceToStay();
         double stay = Math.random();
-        boolean dead = false;
+        boolean[] dead = new boolean[]{false};
 	    final int max = (1 << DIRECTION_COUNT) - 1;
         if (stay < chanceToNotMove)
             return;
 
         for (int m = 0; m < moves; m++) {
-            if (dead)
+            if (dead[0])
                 return;
             boolean foundGoodTile = false;
-            int badTiles = 0;
+            int[] badTiles = new int[]{0};
             while (!foundGoodTile)
             {
                 int direction = getDirection();
-                if (badTiles>=max || direction == -1)
+                if (badTiles[0]>=max || direction == -1)
                     return;
                 foundGoodTile = world.simulateAnimalMove(direction,badTiles,dead,this);
             }

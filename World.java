@@ -67,7 +67,7 @@ public abstract class World {
 
     abstract boolean handleAnimalBreeding(Pair<Integer, Integer> partnerPos, Animal caller);
 
-    abstract boolean simulateAnimalMove(int direction, int badTiles, boolean dead, Animal caller);
+    abstract boolean simulateAnimalMove(int direction, int[] badTiles, boolean[] dead, Animal caller);
 
     abstract int simulatePlantMove(int noGoodTile, final int x, Plant caller);
 
@@ -130,4 +130,11 @@ public abstract class World {
         return options[choice];
     }
 
+    boolean moveOrganism(Organism caller, int dX, int dY)
+    {
+        setOrganismAtPos(caller.getPosition(),null);
+        caller.setPosition(caller.getPosition().getKey()+dX, caller.getPosition().getValue()+dY);
+        setOrganismAtPos(caller.getPosition(),caller);
+        return true;
+    }
 }
