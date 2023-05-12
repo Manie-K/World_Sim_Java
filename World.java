@@ -77,6 +77,7 @@ public abstract class World {
 
     abstract void handleMouseClick(int x, int y, Logger logger);
 
+    abstract boolean handleDefenderFlee(Organism attacker, Organism defender);
     static World loadNewWorld(Logger logger, BufferedReader reader, InputManager input) {
         try {
             String type = reader.readLine();
@@ -124,4 +125,5 @@ public abstract class World {
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         return options[choice];
     }
+
 }

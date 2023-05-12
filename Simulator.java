@@ -25,6 +25,26 @@ public class Simulator {
       setUpWindow(w,h);
       setUpWorld();
    }
+   private void setUpWindow(int w, int h)
+   {
+      final int windowWidth = 1080;
+      final int windowHeight = 920;
+      makeWindow(windowWidth,windowHeight);
+      setUpMapPanel(w,h);
+      setUpLoggerPanel(h,windowWidth);
+      setUpButtonPanel(windowWidth);
+      window.revalidate();
+      window.repaint();
+   }
+   private void makeWindow(int w, int h)
+   {
+      window = new JFrame("193302 Maciej Góralczyk");
+      window.setVisible(true);
+      window.setLayout(null);
+      window.setSize(w,h);
+      window.setBackground(Color.BLACK);
+      window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+   }
    private void setUpMapPanel(int w, int h)
    {
       mapPanel = new JPanel();
@@ -71,27 +91,13 @@ public class Simulator {
              logger.display(logsArea);
          }
       });
-   }
-   private void makeWindow(int w, int h)
-   {
-      window = new JFrame("193302 Maciej Góralczyk");
-      window.setVisible(true);
-      window.setLayout(null);
-      window.setSize(w,h);
-      window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-   }
-   private void setUpWindow(int w, int h)
-   {
-      final int windowWidth = 1080;
-      final int windowHeight = 920;
-      makeWindow(windowWidth,windowHeight);
-      setUpMapPanel(w,h);
       window.add(mapPanel);
-
+   }
+   private void setUpButtonPanel(int windowWidth)
+   {
       JPanel buttonPanel = new JPanel();
       buttonPanel.setBounds(windowWidth-350,0, 350, 500);
-      buttonPanel.setBackground(Color.RED);
+      buttonPanel.setBackground(Color.LIGHT_GRAY);
       buttonPanel.setLayout(null);
 
 
@@ -99,9 +105,6 @@ public class Simulator {
       JButton loadButton = new JButton("Load");
       JButton menuButton = new JButton("Show menu");
 
-      saveButton.setVisible(true);
-      loadButton.setVisible(true);
-      menuButton.setVisible(true);
 
       saveButton.setBounds(75,50,200,100);
       loadButton.setBounds(75,200,200,100);
@@ -120,17 +123,22 @@ public class Simulator {
       buttonPanel.add(saveButton);
       buttonPanel.add(loadButton);
       buttonPanel.add(menuButton);
-
+      saveButton.setVisible(true);
+      loadButton.setVisible(true);
+      menuButton.setVisible(true);
+      buttonPanel.setVisible(true);
       window.add(buttonPanel);
-
+   }
+   private void setUpLoggerPanel(int h, int windowWidth)
+   {
       JPanel loggerDisplay = new JPanel();
-      loggerDisplay.setBounds(0, h*Config.TILE_SIZE+250,windowWidth-20, 250);
+      int y = Math.max(500,h*Config.TILE_SIZE+50);
+      loggerDisplay.setBounds(0, y,windowWidth-20, 250);
 
       logsArea = new JTextArea(Config.LOG_MAX_MESSAGES,60);
       logsArea.setLineWrap(false);
       loggerDisplay.add(logsArea);
       window.add(loggerDisplay);
-
    }
    void run()
    {
@@ -161,9 +169,17 @@ public class Simulator {
    }
    private void setUpWorld()//here are the initial conditions
    {
-      Organism o1 = new Dandelion(world,logger,0, new Pair<Integer,Integer>(5,5));
-      Organism o2 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(12,15));
-      Organism o3 = new Fox(world,logger,Config.FOX_STRENGTH,0,new Pair<Integer,Integer>(19,19));
+      Organism o0 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(12,14));
+      Organism o1 = new Fox(world,logger,Config.FOX_STRENGTH,0, new Pair<Integer,Integer>(5,5));
+      Organism o2 = new Sheep(world,logger,Config.SHEEP_STRENGTH,0, new Pair<Integer,Integer>(9,9));
+      Organism o3 = new Wolf(world,logger,Config.WOLF_STRENGTH,0,new Pair<Integer,Integer>(1,1));
+      Organism o4 = new Turtle(world,logger,Config.TURTLE_STRENGTH,0,new Pair<Integer,Integer>(3,7));
+      Organism o5 = new Antelope(world,logger,Config.ANTELOPE_STRENGTH,0,new Pair<Integer,Integer>(0,0));
+      Organism o6 = new Dandelion(world,logger,0,new Pair<Integer,Integer>(14,14));
+      Organism o7 = new Grass(world,logger,0,new Pair<Integer,Integer>(10,10));
+      Organism o8 = new Guarana(world,logger,0,new Pair<Integer,Integer>(2,6));
+      Organism o9 = new WolfBerries(world,logger,0,new Pair<Integer,Integer>(9,1));
+      Organism o10 = new GiantHogweed(world,logger,0,new Pair<Integer,Integer>(8,3));
    }
    private void save(){
       try {

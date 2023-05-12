@@ -195,6 +195,47 @@ public class GridWorld extends World{
         }
     }
     @Override
+    boolean handleDefenderFlee(Organism attacker, Organism defender){
+        Pair<Integer,Integer> tempPos = defender.getPosition();
+        int positionFirst = tempPos.getKey();
+        int positionSecond = tempPos.getValue();
+        if (positionSecond > 0 &&
+                getOrganismAtPos(positionFirst,positionSecond - 1) == null)
+        {
+            setOrganismAtPos(tempPos,null);
+            defender.setPosition(positionFirst,positionSecond-1);
+            setOrganismAtPos(defender.getPosition(),defender);
+        }
+        else if (positionSecond < worldHeight-1 &&
+                getOrganismAtPos(positionFirst,positionSecond + 1) == null)
+        {
+            setOrganismAtPos(tempPos,null);
+            defender.setPosition(positionFirst,positionSecond+1);
+            setOrganismAtPos(defender.getPosition(),defender);
+        }
+        else if (positionFirst < worldWidth-1 &&
+                getOrganismAtPos(positionFirst+1,positionSecond) == null)
+        {
+            setOrganismAtPos(tempPos,null);
+            defender.setPosition(positionFirst+1,positionSecond);
+            setOrganismAtPos(defender.getPosition(),defender);
+        }
+        else if (positionFirst > 0 &&
+                getOrganismAtPos(positionFirst - 1,positionSecond ) == null)
+        {
+            setOrganismAtPos(tempPos,null);
+            defender.setPosition(positionFirst-1,positionSecond);
+            setOrganismAtPos(defender.getPosition(),defender);
+        }
+        else
+            return false; //no empty tile
+
+        setOrganismAtPos(attacker.getPosition(),null);
+        attacker.setPosition(tempPos);
+        setOrganismAtPos(attacker.getPosition(),attacker);
+        return true;
+    }
+    @Override
     Organism getOrganismAtPos(Pair<Integer, Integer> pos) {
         return map[pos.getValue()][pos.getKey()];
     }
@@ -216,6 +257,7 @@ public class GridWorld extends World{
     int getDirectionCount(){return 4;}
     @Override
     void drawWorld(JPanel mapPanel) {
+        mapPanel.removeAll();
         mapPanel.add(new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -317,6 +359,7 @@ public class GridWorld extends World{
     {
         map = tempMap;
     }
+    @Override
     int getHumanDirection(Pair<Integer,Integer> pos, InputManager input)
     {
         int tempDir = input.getHumanDirection(pos);
@@ -332,4 +375,5 @@ public class GridWorld extends World{
             return -1;
         return tempDir;
     }
+
 }
