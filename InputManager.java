@@ -52,6 +52,8 @@ public class InputManager {
     {
         direction = 3;
     }
+    void moveNorthWest(){direction = 4;}
+    void moveSouthWest(){direction = 5;}
     boolean getNextTurn()
     {
         return nextTurn;

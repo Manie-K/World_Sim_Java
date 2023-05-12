@@ -56,6 +56,8 @@ public class Config {
                 "Strzałka w dół         ->      Dół\n" +
                 "Strzałka w prawo       ->      Prawo\n" +
                 "Strzałka w lewo        ->      Lewo\n" +
+                "T(HEX)                 ->      Prawa góra\n" +
+                "G(HEX)                 ->      Prawy dół\n" +
                 "-------INFO-------\n" +
                 "Żółty          ->      Czlowiek\n" +
                 "Czerwony       ->      Wilk\n" +

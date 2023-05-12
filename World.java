@@ -83,6 +83,8 @@ public abstract class World {
             String type = reader.readLine();
             if (type.equals(Config.GRID_TYPE))
                 return GridWorld.load(logger, reader, input);
+            else if(type.equals(Config.HEX_TYPE))
+                return HexWorld.load(logger,reader,input);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

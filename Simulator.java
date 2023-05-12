@@ -20,8 +20,8 @@ public class Simulator {
       logger = new Logger(manager);
       if(type == 0)
          world = new GridWorld(w, h);
-      //else if(type == 1)
-        // world = new HexWorld(w,h);
+      else if(type == 1)
+         world = new HexWorld(w,h);
       setUpWindow(w,h);
       setUpWorld();
    }
@@ -67,16 +67,14 @@ public class Simulator {
                manager.moveUp();
                manager.setNextTurn(true);
             }
-            /*
-            * else if (e.getKeyCode() == KeyEvent.VK_E && world.getDirectionCount==6){
-               manager.moveNE();
+            else if (e.getKeyCode() == KeyEvent.VK_T && world.getDirectionCount()==6){
+               manager.moveNorthWest();
                manager.setNextTurn(true);
             }
-            * else if (e.getKeyCode() == KeyEvent.VK_Q && world.getDirectionCount==6){
-               manager.moveNW();
+            else if (e.getKeyCode() == KeyEvent.VK_G && world.getDirectionCount()==6){
+               manager.moveSouthWest();
                manager.setNextTurn(true);
             }
-            * */
             else if (e.getKeyCode() == KeyEvent.VK_P){
                manager.ability();
                manager.setNextTurn(false);
