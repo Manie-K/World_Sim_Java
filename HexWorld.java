@@ -412,24 +412,81 @@ public class HexWorld extends World{
     @Override
     int getDirectionCount(){return 6;}
     @Override
+    int getMapWidth(){return Config.TILE_SIZE/2 + Config.TILE_SIZE*worldWidth;}
+    @Override
+    int getMapHeight(){
+        int h = worldHeight;
+        int x = Config.TILE_SIZE;
+        if(h==1)
+            return x;
+        else if(h%2 == 0)
+        {
+            return (x*(h/2)*5)/3;
+        }
+        else
+        {
+            return (x*((h-1)/2)*7)/3;
+        }
+    }
+    @Override
     void drawWorld(JPanel mapPanel) {
         mapPanel.removeAll();
         mapPanel.add(new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                for(int y = 0; y < worldHeight; y++)
+                final int xSize = worldWidth;
+                final int ySize = worldHeight;
+                final int z = Config.TILE_SIZE;
+                int xGlobal = 0;
+                int yGlobal = 0;
+                //odd rows
+                for(int y = 0; y < ySize; y+=2)
                 {
-                    for (int x = 0; x < worldWidth; x++)
+                    xGlobal = 0;
+                    if(y==0)
+                        yGlobal = 0;
+                    for (int x = xGlobal; x < xSize; x++)
                     {
                         Color color = Config.DEFAULT_COLOR;
                         if(map[y][x]!=null)
                             color = map[y][x].draw();
                         g.setColor(color);
-                        g.fillRect(x*Config.TILE_SIZE, y*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+                        int[] xPoints = {xGlobal,xGlobal,xGlobal+(z/2),xGlobal+z,xGlobal+z,xGlobal+(z/2)};
+                        int[] yPoints = {yGlobal+(z/3),yGlobal+((2*z)/3),yGlobal+z,
+                                yGlobal+((2*z)/3),yGlobal+(z/3),yGlobal};
+                        Polygon hexagon = new Polygon(xPoints, yPoints, 6);
+                        g.fillPolygon(hexagon);
                         g.setColor(Color.BLACK);
-                        g.drawRect(x*Config.TILE_SIZE, y*Config.TILE_SIZE, Config.TILE_SIZE, Config.TILE_SIZE);
+                        g.drawPolygon(hexagon);
+
+                        xGlobal+=z;
                     }
+                    yGlobal += (4*z)/3;
+                }
+                //even rows
+                for(int y = 1; y < ySize; y+=2)
+                {
+                    xGlobal = z/2;
+                    if(y==1)
+                        yGlobal = (2*z)/3;
+                    for (int x = 0; x < xSize; x++)
+                    {
+                        Color color = Config.DEFAULT_COLOR;
+                        if(map[y][x]!=null)
+                            color = map[y][x].draw();
+                        g.setColor(color);
+                        int[] xPoints = {xGlobal,xGlobal,xGlobal+(z/2),xGlobal+z,xGlobal+z,xGlobal+(z/2)};
+                        int[] yPoints = {yGlobal+(z/3),yGlobal+((2*z)/3),yGlobal+z,
+                                yGlobal+((2*z)/3),yGlobal+(z/3),yGlobal};
+                        Polygon hexagon = new Polygon(xPoints, yPoints, 6);
+                        g.fillPolygon(hexagon);
+                        g.setColor(Color.BLACK);
+                        g.drawPolygon(hexagon);
+
+                        xGlobal+=z;
+                    }
+                    yGlobal += (4*z)/3;
                 }
             }
 

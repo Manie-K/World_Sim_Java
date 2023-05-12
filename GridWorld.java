@@ -19,6 +19,10 @@ public class GridWorld extends World{
         map = new Organism[h][w];
     }
     @Override
+    int getMapWidth(){return worldWidth*Config.TILE_SIZE;}
+    @Override
+    int getMapHeight(){ return worldHeight*Config.TILE_SIZE;}
+    @Override
     boolean simulateAnimalMove(int direction, int badTiles,boolean dead, Animal caller){
         if (direction == 0 && caller.getPosition().getValue() > 0 && (badTiles & (1 << direction))==0)//up
         {

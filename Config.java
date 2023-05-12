@@ -7,7 +7,7 @@ public class Config {
         public static String GRID_TYPE = "GRID_TYPE";
         public static String HEX_TYPE = "HEX_TYPE";
         public static final int LOG_MAX_MESSAGES = 12;
-        public static final int TILE_SIZE = 20;
+        public static int TILE_SIZE = 20;
         public static final double PLANT_SEED_CHANCE = 0.35;
 
         public static final int ABILITY_TIME = 5;

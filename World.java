@@ -51,6 +51,8 @@ public abstract class World {
         organisms.removeIf(Objects::isNull);
     }
 
+    abstract int getMapWidth();
+    abstract int getMapHeight();
     abstract Organism getOrganismAtPos(Pair<Integer, Integer> pos);
 
     abstract Organism getOrganismAtPos(int x, int y);

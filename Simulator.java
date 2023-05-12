@@ -12,26 +12,29 @@ public class Simulator {
    JFrame window;
    JPanel mapPanel;
    JTextArea logsArea;
-   Simulator(Pair<Integer,Integer> pos, int type)
+   Simulator(Pair<Integer,Integer> size, int type)
    {
-      int w = pos.getKey();
-      int h = pos.getValue();
+      int w = size.getKey();
+      int h = size.getValue();
       manager = new InputManager(0,0);
       logger = new Logger(manager);
       if(type == 0)
          world = new GridWorld(w, h);
-      else if(type == 1)
-         world = new HexWorld(w,h);
-      setUpWindow(w,h);
+      else if(type == 1) {
+         Config.TILE_SIZE *=3;
+         Config.TILE_SIZE /=2;
+         world = new HexWorld(w, h);
+      }
+      setUpWindow();
       setUpWorld();
    }
-   private void setUpWindow(int w, int h)
+   private void setUpWindow()
    {
       final int windowWidth = 1080;
       final int windowHeight = 920;
       makeWindow(windowWidth,windowHeight);
-      setUpMapPanel(w,h);
-      setUpLoggerPanel(h,windowWidth);
+      setUpMapPanel();
+      setUpLoggerPanel(windowWidth);
       setUpButtonPanel(windowWidth);
       window.revalidate();
       window.repaint();
@@ -45,11 +48,11 @@ public class Simulator {
       window.setBackground(Color.BLACK);
       window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
    }
-   private void setUpMapPanel(int w, int h)
+   private void setUpMapPanel()
    {
       mapPanel = new JPanel();
       mapPanel.setBackground(Color.BLUE);
-      mapPanel.setBounds(0,0,w*Config.TILE_SIZE,h*Config.TILE_SIZE);
+      mapPanel.setBounds(0,0,world.getMapWidth(),world.getMapHeight());
       mapPanel.setLayout(new BorderLayout());
       mapPanel.addKeyListener(new KeyAdapter() {
          @Override
@@ -127,10 +130,10 @@ public class Simulator {
       buttonPanel.setVisible(true);
       window.add(buttonPanel);
    }
-   private void setUpLoggerPanel(int h, int windowWidth)
+   private void setUpLoggerPanel(int windowWidth)
    {
       JPanel loggerDisplay = new JPanel();
-      int y = Math.max(500,h*Config.TILE_SIZE+50);
+      int y = Math.max(500,world.getMapHeight()+50);
       loggerDisplay.setBounds(0, y,windowWidth-20, 250);
 
       logsArea = new JTextArea(Config.LOG_MAX_MESSAGES,60);
@@ -167,8 +170,8 @@ public class Simulator {
    }
    private void setUpWorld()//here are the initial conditions
    {
-      Organism o0 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(12,14));
-      Organism o1 = new Fox(world,logger,Config.FOX_STRENGTH,0, new Pair<Integer,Integer>(5,5));
+      Organism o0 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(1,1));
+      /*Organism o1 = new Fox(world,logger,Config.FOX_STRENGTH,0, new Pair<Integer,Integer>(5,5));
       Organism o2 = new Sheep(world,logger,Config.SHEEP_STRENGTH,0, new Pair<Integer,Integer>(9,9));
       Organism o3 = new Wolf(world,logger,Config.WOLF_STRENGTH,0,new Pair<Integer,Integer>(1,1));
       Organism o4 = new Turtle(world,logger,Config.TURTLE_STRENGTH,0,new Pair<Integer,Integer>(3,7));
@@ -177,7 +180,7 @@ public class Simulator {
       Organism o7 = new Grass(world,logger,0,new Pair<Integer,Integer>(10,10));
       Organism o8 = new Guarana(world,logger,0,new Pair<Integer,Integer>(2,6));
       Organism o9 = new WolfBerries(world,logger,0,new Pair<Integer,Integer>(9,1));
-      Organism o10 = new GiantHogweed(world,logger,0,new Pair<Integer,Integer>(8,3));
+      Organism o10 = new GiantHogweed(world,logger,0,new Pair<Integer,Integer>(8,3));*/
    }
    private void save(){
       try {
