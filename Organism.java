@@ -8,8 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public abstract class Organism {
-    private int strength,initiative,age;
-    private String species;
+    private int strength,age;
+    private final int initiative;
+    private final String species;
     private Pair<Integer, Integer> position;
     World world;
     Logger logger;
@@ -82,7 +83,6 @@ public abstract class Organism {
             posF = Integer.parseInt(line);
             line = reader.readLine();
             posS = Integer.parseInt(line);
-
 
             Pair<Integer,Integer> pos = new Pair<>(posF,posS);
             if (spec.equals(Config.WOLF_SPEC))

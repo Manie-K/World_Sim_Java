@@ -12,7 +12,7 @@ import java.util.Vector;
 
 public class GridWorld extends World{
     private Organism[][] map;
-    private String worldType = Config.GRID_TYPE;
+    private final String worldType = Config.GRID_TYPE;
     GridWorld(int w, int h)
     {
         super(w,h);
@@ -244,6 +244,17 @@ public class GridWorld extends World{
         mapPanel.repaint();
     }
 
+    @Override
+    void handleMouseClick(int x, int y, Logger logger)
+    {
+        int xPos = x / Config.TILE_SIZE;
+        int yPos = y / Config.TILE_SIZE;
+        if(getOrganismAtPos(xPos,yPos) == null)
+        {
+            Organism addedOrganism = addNewOrganismFromClick(this, logger, xPos, yPos);
+            logger.addLog("Added: " + addedOrganism.getSpecies());
+        }
+    }
     @Override
     void saveFile(FileWriter writer) {
         try {

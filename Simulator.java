@@ -2,10 +2,7 @@ package World_sim;
 import javafx.util.Pair;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.*;
 
 public class Simulator {
@@ -15,21 +12,8 @@ public class Simulator {
    JFrame window;
    JPanel mapPanel;
    JTextArea logsArea;
-   private void makeWindow(int w, int h)
+   private void setUpMapPanel(int w, int h)
    {
-      window = new JFrame("193302 Maciej Góralczyk");
-      window.setVisible(true);
-      window.setLayout(null);
-      window.setSize(w,h);
-      window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-   }
-   private void setUpWindow(int w, int h)
-   {
-      final int windowWidth = 1080;
-      final int windowHeight = 920;
-      makeWindow(windowWidth,windowHeight);
-
       mapPanel = new JPanel();
       mapPanel.setBackground(Color.BLUE);
       mapPanel.setBounds(0,0,w*Config.TILE_SIZE,h*Config.TILE_SIZE);
@@ -66,6 +50,30 @@ public class Simulator {
             }
          }
       });
+      mapPanel.addMouseListener(new MouseAdapter() {
+         @Override
+         public void mouseReleased(MouseEvent e) {
+             world.handleMouseClick(e.getX(), e.getY(), logger);
+             world.drawWorld(mapPanel);
+             logger.display(logsArea);
+         }
+      });
+   }
+   private void makeWindow(int w, int h)
+   {
+      window = new JFrame("193302 Maciej Góralczyk");
+      window.setVisible(true);
+      window.setLayout(null);
+      window.setSize(w,h);
+      window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+   }
+   private void setUpWindow(int w, int h)
+   {
+      final int windowWidth = 1080;
+      final int windowHeight = 920;
+      makeWindow(windowWidth,windowHeight);
+      setUpMapPanel(w,h);
       window.add(mapPanel);
 
       JPanel buttonPanel = new JPanel();
