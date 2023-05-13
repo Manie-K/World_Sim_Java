@@ -488,16 +488,6 @@ public class HexWorld extends World{
     int getMapHeight(){
         int h = worldHeight;
         int x = Config.TILE_SIZE;
-        /*if(h==1)
-            return x;
-        else if(h%2 == 0)
-        {
-            return (x*(h/2)*5)/3;
-        }
-        else
-        {
-            return (x*((h-1)/2)*7)/3;
-        }*/
         int sum = 0;
         for(int i = 0; i < h; i++)
         {
@@ -580,11 +570,70 @@ public class HexWorld extends World{
     }
 
     @Override
-    void handleMouseClick(int x, int y, Logger logger)
+    void handleMouseClick(int xClick, int yClick, Logger logger)
     {
-        int xPos = x / Config.TILE_SIZE;
-        int yPos = y / Config.TILE_SIZE;
-        if(getOrganismAtPos(xPos,yPos) == null)
+        final int xSize = worldWidth;
+        final int ySize = worldHeight;
+        final int z = Config.TILE_SIZE;
+        int xGlobal = 0;
+        int yGlobal = 0;
+        int xPos = -1;
+        int yPos = -1;
+        boolean found = false;
+        Point clickPoint = new Point(xClick,yClick);
+        //odd rows
+        for(int y = 0; y < ySize; y+=2)
+        {
+            if(found)
+                break;
+            xGlobal = 0;
+            if(y==0)
+                yGlobal = 0;
+            for (int x = xGlobal; x < xSize; x++)
+            {
+                int[] xPoints = {xGlobal,xGlobal,xGlobal+(z/2),xGlobal+z,xGlobal+z,xGlobal+(z/2)};
+                int[] yPoints = {yGlobal+(z/3),yGlobal+((2*z)/3),yGlobal+z,
+                        yGlobal+((2*z)/3),yGlobal+(z/3),yGlobal};
+                Polygon hexagon = new Polygon(xPoints, yPoints, 6);
+                if(hexagon.contains(clickPoint))
+                {
+                    found = true;
+                    xPos = x;
+                    yPos = y;
+                    break;
+                }
+                xGlobal+=z;
+            }
+            yGlobal += (4*z)/3;
+        }
+        //even rows
+
+        for(int y = 1; y < ySize; y+=2)
+        {
+            if(found)
+                break;
+            xGlobal = z/2;
+            if(y==1)
+                yGlobal = (2*z)/3;
+            for (int x = 0; x < xSize; x++)
+            {
+                int[] xPoints = {xGlobal,xGlobal,xGlobal+(z/2),xGlobal+z,xGlobal+z,xGlobal+(z/2)};
+                int[] yPoints = {yGlobal+(z/3),yGlobal+((2*z)/3),yGlobal+z,
+                        yGlobal+((2*z)/3),yGlobal+(z/3),yGlobal};
+                Polygon hexagon = new Polygon(xPoints, yPoints, 6);
+                if(hexagon.contains(clickPoint))
+                {
+                    found = true;
+                    xPos = x;
+                    yPos = y;
+                    break;
+                }
+                xGlobal+=z;
+            }
+            yGlobal += (4*z)/3;
+        }
+
+        if(found && getOrganismAtPos(xPos,yPos) == null)
         {
             Organism addedOrganism = addNewOrganismFromClick(this, logger, xPos, yPos);
             logger.addLog("Added: " + addedOrganism.getSpecies());
