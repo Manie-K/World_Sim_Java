@@ -170,13 +170,13 @@ public class Simulator {
    }
    private void setUpWorld()//here are the initial conditions
    {
-      Organism o0 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(1,1));
-      Organism o1 = new Fox(world,logger,Config.FOX_STRENGTH,0, new Pair<Integer,Integer>(5,5));
+      Organism o0 = new Human(world,logger,manager,Config.HUMAN_STRENGTH,0, new Pair<Integer,Integer>(4,2));
+      Organism o1 = new Fox(world,logger,Config.FOX_STRENGTH,0, new Pair<Integer,Integer>(4,4));
       Organism o2 = new Sheep(world,logger,Config.SHEEP_STRENGTH,0, new Pair<Integer,Integer>(9,9));
       Organism o3 = new Wolf(world,logger,Config.WOLF_STRENGTH,0,new Pair<Integer,Integer>(3,17));
       Organism o4 = new Turtle(world,logger,Config.TURTLE_STRENGTH,0,new Pair<Integer,Integer>(3,7));
       Organism o5 = new Antelope(world,logger,Config.ANTELOPE_STRENGTH,0,new Pair<Integer,Integer>(0,0));
-      Organism o6 = new Dandelion(world,logger,0,new Pair<Integer,Integer>(14,14));
+      Organism o6 = new Dandelion(world,logger,0,new Pair<Integer,Integer>(3,3));
       Organism o7 = new Grass(world,logger,0,new Pair<Integer,Integer>(10,10));
       Organism o8 = new Guarana(world,logger,0,new Pair<Integer,Integer>(2,6));
       Organism o9 = new WolfBerries(world,logger,0,new Pair<Integer,Integer>(9,1));

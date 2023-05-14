@@ -100,13 +100,13 @@ public class HexWorld extends World{
             else badTiles[0] |= (1 << direction);
         }
 
-        else if (direction == 4 && caller.getPosition().getKey() < worldWidth - 1 &&
-                caller.getPosition().getValue() > 0 && (badTiles[0] & (1 << direction))==0)//Top right
+        else if (direction == 4 && caller.getPosition().getValue() > 0 &&
+                (badTiles[0] & (1 << direction))==0)//Top right
         {
             tempPos = new Pair<>(caller.getPosition().getKey()+1, caller.getPosition().getValue()-1 );
             if(evenRow)
                 tempPos= new Pair<>(caller.getPosition().getKey(), caller.getPosition().getValue() - 1 );
-            if(tempPos.getKey() < 0) {
+            if(tempPos.getKey() > worldWidth - 1) {
                 badTiles[0] |= (1 << direction);
                 return false;
             }
@@ -124,13 +124,13 @@ public class HexWorld extends World{
             else badTiles[0] |= (1 << direction);
         }
 
-        else if (direction == 5 && caller.getPosition().getKey() < worldWidth - 1 &&
-                caller.getPosition().getValue() < worldHeight - 1&& (badTiles[0] & (1 << direction))==0)//Bottom right
+        else if (direction == 5 && caller.getPosition().getValue() < worldHeight - 1
+                && (badTiles[0] & (1 << direction))==0)//Bottom right
         {
             tempPos = new Pair<>(caller.getPosition().getKey()+1, caller.getPosition().getValue()+1 );
             if(evenRow)
                 tempPos= new Pair<>(caller.getPosition().getKey(), caller.getPosition().getValue() + 1 );
-            if(tempPos.getKey() < 0) {
+            if(tempPos.getKey() > worldWidth - 1) {
                 badTiles[0] |= (1 << direction);
                 return false;
             }
@@ -436,7 +436,7 @@ public class HexWorld extends World{
     Organism getOrganismAtPos(Pair<Integer, Integer> pos) {
         try {
             if(pos.getKey()<0 || pos.getValue()<0 || pos.getValue() >= worldHeight || pos.getKey() >=worldWidth)
-                throw new IndexOutOfBoundsException("Creating organism outside of map!");
+                throw new IndexOutOfBoundsException("Getting organism outside of map!");
             return map[pos.getValue()][pos.getKey()];
         }catch (Exception e)
         {
@@ -448,7 +448,7 @@ public class HexWorld extends World{
     Organism getOrganismAtPos(int x, int y) {
         try {
             if(x<0 || y<0 || y >= worldHeight || x >=worldWidth)
-                throw new IndexOutOfBoundsException("Creating organism outside of map!");
+                throw new IndexOutOfBoundsException("Getting organism outside of map!");
             return map[y][x];
         }catch (Exception e)
         {
@@ -461,7 +461,7 @@ public class HexWorld extends World{
     {
         try {
             if(pos.getKey()<0 || pos.getValue()<0 || pos.getValue() >= worldHeight || pos.getKey() >=worldWidth)
-                throw new IndexOutOfBoundsException("Creating organism outside of map!");
+                throw new IndexOutOfBoundsException("Setting organism outside of map!");
             map[pos.getValue()][pos.getKey()] = newOrganism;
         }catch (Exception e)
         {
@@ -473,7 +473,7 @@ public class HexWorld extends World{
     {
         try {
             if(x<0 || y<0 || y >= worldHeight || x >=worldWidth)
-                throw new IndexOutOfBoundsException("Creating organism outside of map!");
+                throw new IndexOutOfBoundsException("Setting organism outside of map!");
             map[y][x] = newOrganism;
         }catch (Exception e)
         {
@@ -486,10 +486,9 @@ public class HexWorld extends World{
     int getMapWidth(){return Config.TILE_SIZE/2 + Config.TILE_SIZE*worldWidth;}
     @Override
     int getMapHeight(){
-        int h = worldHeight;
         int x = Config.TILE_SIZE;
         int sum = 0;
-        for(int i = 0; i < h; i++)
+        for(int i = 0; i < worldHeight; i++)
         {
             if(i%2==0)
                 sum += x;
@@ -508,8 +507,8 @@ public class HexWorld extends World{
                 final int xSize = worldWidth;
                 final int ySize = worldHeight;
                 final int z = Config.TILE_SIZE;
-                int xGlobal = 0;
-                int yGlobal = 0;
+                int xGlobal;
+                int yGlobal=0;
                 //odd rows
                 for(int y = 0; y < ySize; y+=2)
                 {
@@ -575,7 +574,7 @@ public class HexWorld extends World{
         final int xSize = worldWidth;
         final int ySize = worldHeight;
         final int z = Config.TILE_SIZE;
-        int xGlobal = 0;
+        int xGlobal;
         int yGlobal = 0;
         int xPos = -1;
         int yPos = -1;
@@ -661,11 +660,11 @@ public class HexWorld extends World{
             int w, h, size;
             String line;
             line = reader.readLine();
-            w = Integer.valueOf(line);
+            w = Integer.parseInt(line);
             line = reader.readLine();
-            h = Integer.valueOf(line);
+            h = Integer.parseInt(line);
             line = reader.readLine();
-            size = Integer.valueOf(line);
+            size = Integer.parseInt(line);
 
             HexWorld hexWorld = new HexWorld(w, h);
             Vector<Organism> organismsTemp = new Vector<>();
@@ -704,20 +703,21 @@ public class HexWorld extends World{
     int getHumanDirection(Pair<Integer,Integer> pos, InputManager input)
     {
         int tempDir = input.getHumanDirection(pos);
+        boolean isEven = pos.getValue()%2==0;
         if(tempDir <0 || tempDir >= getDirectionCount())
             return -1;
 
-        if(tempDir == 0 && pos.getValue() <= 0)
+        if(tempDir == 0 && (pos.getValue() <= 0||(isEven&&pos.getKey()<=0)))
             return -1;
-        if(tempDir == 1 && pos.getValue() >= worldHeight-1)
+        if(tempDir == 1 && (pos.getValue() >= worldHeight-1 ||(isEven&&pos.getKey()<=0)))
             return -1;
         if(tempDir == 2 && pos.getKey() >= worldWidth-1)
             return -1;
         if(tempDir == 3 && pos.getKey() <= 0)
             return -1;
-        if(tempDir == 4 && (pos.getValue() <= 0 || pos.getKey() >=worldWidth-1))
+        if(tempDir == 4 && (pos.getValue() <= 0 || (!isEven&&pos.getKey() >= worldWidth-1)))
             return -1;
-        if(tempDir == 5 && (pos.getValue() >= worldHeight-1|| pos.getKey() >=worldWidth-1))
+        if(tempDir == 5 && (pos.getValue() >= worldHeight-1|| (!isEven&&pos.getKey() >=worldWidth-1)))
             return -1;
         return tempDir;
     }
