@@ -315,7 +315,8 @@ public class HexWorld extends World{
     @Override
     void killNearbyAnimals(Organism caller)
     {
-        Pair<Integer,Integer> position = caller.getPosition();
+        Pair<Integer,Integer> defPosition = caller.getPosition();
+        Pair<Integer,Integer> position = defPosition;
         boolean evenRow = position.getValue()%2==0;
         position = new Pair<>(position.getKey(), position.getValue()-1);
         if (position.getValue() >= 0 && getOrganismAtPos(position) instanceof Animal)
@@ -323,28 +324,28 @@ public class HexWorld extends World{
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
-
+        position = defPosition;
         position = new Pair<>(position.getKey(), position.getValue()+1);
         if (position.getValue() <= worldHeight - 1 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
-
+        position = defPosition;
         position = new Pair<>(position.getKey()+1, position.getValue());
         if (position.getKey() <= worldWidth - 1 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
-
+        position = defPosition;
         position = new Pair<>(position.getKey()-1, position.getValue());
         if (position.getKey() >= 0 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
-
+        position = defPosition;
         position = new Pair<>(position.getKey()+1, position.getValue()-1);
         if (!evenRow && position.getKey() <= worldWidth - 1 &&position.getValue() >= 0
                 && getOrganismAtPos(position) instanceof Animal)
@@ -352,7 +353,7 @@ public class HexWorld extends World{
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
-
+        position = defPosition;
         position = new Pair<>(position.getKey()+1, position.getValue()+1);
         if (!evenRow && position.getKey() <= worldWidth - 1 &&position.getValue() <= worldHeight - 1
                 && getOrganismAtPos(position) instanceof Animal)
@@ -360,6 +361,7 @@ public class HexWorld extends World{
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
+        position = defPosition;
         position = new Pair<>(position.getKey()-1, position.getValue()-1);
         if (evenRow && position.getKey() >= 0 && position.getValue() >= 0
                 && getOrganismAtPos(position) instanceof Animal)
@@ -367,7 +369,7 @@ public class HexWorld extends World{
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
-
+        position = defPosition;
         position = new Pair<>(position.getKey()-1, position.getValue()+1);
         if (evenRow && position.getKey() >= 0 && position.getValue() <= worldHeight - 1
                 && getOrganismAtPos(position) instanceof Animal)

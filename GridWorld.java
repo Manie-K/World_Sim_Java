@@ -165,25 +165,29 @@ public class GridWorld extends World{
     @Override
     void killNearbyAnimals(Organism caller)
     {
-        Pair<Integer,Integer> position = caller.getPosition();
+        Pair<Integer,Integer> defPosition = caller.getPosition();
+        Pair<Integer,Integer> position = defPosition;
         position = new Pair<>(position.getKey(), position.getValue()-1);
         if (position.getValue() > 0 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
+        position = defPosition;
         position = new Pair<>(position.getKey(), position.getValue()+1);
         if (position.getValue() < worldHeight - 1 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
+        position = defPosition;
         position = new Pair<>(position.getKey()+1, position.getValue());
         if (position.getKey() < worldWidth - 1 && getOrganismAtPos(position) instanceof Animal)
         {
             caller.logger.addLog(caller.getSpecies() + " killed " + getOrganismAtPos(position).getSpecies());
             caller.killOrganism(getOrganismAtPos(position));
         }
+        position = defPosition;
         position = new Pair<>(position.getKey()-1, position.getValue());
         if (position.getKey() > 0 && getOrganismAtPos(position) instanceof Animal)
         {
@@ -309,11 +313,11 @@ public class GridWorld extends World{
             int w, h, size;
             String line;
             line = reader.readLine();
-            w = Integer.valueOf(line);
+            w = Integer.parseInt(line);
             line = reader.readLine();
-            h = Integer.valueOf(line);
+            h = Integer.parseInt(line);
             line = reader.readLine();
-            size = Integer.valueOf(line);
+            size = Integer.parseInt(line);
 
             GridWorld gridWorld = new GridWorld(w, h);
             Vector<Organism> organismsTemp = new Vector<>();

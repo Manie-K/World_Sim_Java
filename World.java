@@ -39,7 +39,7 @@ public abstract class World {
             } else {
                 return Integer.compare(o2.getInitiative(), o1.getInitiative());
             }
-        });//FIX THIS
+        });
         int fixedSize = organisms.size();
         for (int i = 0; i < fixedSize; i++) {
             Organism currentOrganism = organisms.get(i);

@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class GiantHogweed extends Plant{
     GiantHogweed(World w, Logger l, int a,Pair<Integer, Integer> pos){
-        super(w,l,0,a,Config.GIANT_HOGWEED_SPEC,pos);
+        super(w,l,10,a,Config.GIANT_HOGWEED_SPEC,pos);
     }
     @Override
     Organism giveBirth(World w, Logger l, Pair<Integer, Integer> pos) {
